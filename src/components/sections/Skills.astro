@@ -11,12 +11,16 @@ import Git from "@/icons/git.astro"
 import GitHub from "@/icons/GitHub.astro"
 import Tailwind from "@/icons/tailwind.astro"
 import Next from "@/icons/next.astro"
-import { skills } from "@cv"
+import { skills } from "@cv_es"
 import Swift from "@/icons/swift.astro"
 import SwiftUI from "@/icons/swiftui.astro"
 import Kotlin from "@/icons/kotlin.astro"
 import Flutter from "@/icons/flutter.astro"
-import Angular from '@/icons/angular.astro'
+import Angular from "@/icons/angular.astro"
+import CSharp from "@/icons/CSharp.astro"
+import SqlServer from "@/icons/SqlServer.astro"
+
+const title = Astro.props.title
 
 const SKILLS_ICONS: Record<string, any> = {
   HTML,
@@ -34,11 +38,13 @@ const SKILLS_ICONS: Record<string, any> = {
   SwiftUI,
   Kotlin,
   Flutter,
-  Angular
+  Angular,
+  CSharp,
+  SqlServer,
 }
 ---
 
-<Section title="Habilidades">
+<Section title={title}>
   <ul>
     {
       skills.map(({ name }) => {

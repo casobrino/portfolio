@@ -1,0 +1,236 @@
+{
+  "basics": {
+    "name": "César Augusto Sobrino Pech",
+    "label": "Full Stack Developer with more than 5 years of experience.",
+    "image": "https://avatars.githubusercontent.com/u/19161397?v=4",
+    "email": "casobrino_0@hotmail.com",
+    "phone": "+52 9961053735",
+    "url": "https://cesarsobrino.com",
+    "summary": "With over 5 years of experience, I am a developer seeking both professional and personal growth. With stronger expertise in Frontend development, I enjoy bringing ideas and passion to the projects I’m involved in. I currently work for Billboardplanet, a multinational Outdoor Advertising company headquartered in the United States and Nepal.",
+    "location": {
+      "address": "Calle 59b2 #280 between 124 and 126",
+      "postalCode": "97238",
+      "city": "Mérida, Yucatán",
+      "countryCode": "MX",
+      "region": "Mexico"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "casobrino",
+        "url": "https://linkedin.com/in/casobrino0"
+      },
+      {
+        "network": "GitHub",
+        "username": "casobrino",
+        "url": "https://github.com/casobrino"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Billboard Planet",
+      "position": "Full Stack Developer (.NET, Angular, SQL Server)",
+      "url": "https://online.billboardplanet.com/",
+      "startDate": "2022-07-15",
+      "endDate": null,
+      "summary": "Development and maintenance of outdoor advertising management software, creation of new modules, and integration with external APIs. At Billboard Planet, the UX and UI vision I contribute is highly valued by the company.",
+      "highlights": [""]
+    },
+    {
+      "name": "Humanlab",
+      "position": "Full Stack Developer",
+      "url": "https://www.hiumanlab.com/",
+      "startDate": "2022-01-15",
+      "endDate": "2022-12-20",
+      "summary": "At Humanlab, we worked under contract with various companies and projects. During my time there, I worked with different technologies, mainly using React frameworks for the frontend and NestJS for the backend.",
+      "highlights": [""]
+    },
+    {
+      "name": "Freelance",
+      "position": "Freelancer",
+      "startDate": "2016-05-01",
+      "endDate": "2019-05-01",
+      "summary": "I was part of a group of freelancers working during university to cover personal expenses. Most of the projects were assigned by professors.",
+      "highlights": ["Started the company"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Instituto Tecnológico de Mérida",
+      "url": "https://www.merida.tecnm.mx/",
+      "area": "Computer Systems Engineering",
+      "studyType": "Bachelor",
+      "startDate": "2015-08-01",
+      "endDate": "2018-12-01",
+      "score": "0.0",
+      "courses": [
+        "Programming - Database Management - API Creation and Integration - Mobile Development"
+      ]
+    },
+    {
+      "institution": "Benjamin Franklin Institute",
+      "url": "https://benjaminfranklin.com.mx/",
+      "area": "English Language C2",
+      "studyType": "Bachelor",
+      "startDate": "2022-08-01",
+      "endDate": "2023-12-01",
+      "score": "0.0",
+      "courses": ["English Language Level C2"]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Award",
+      "date": "2014-11-01",
+      "awarder": "Company",
+      "summary": "There is no spoon."
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Certificate",
+      "date": "2021-11-07",
+      "issuer": "Company",
+      "url": "https://certificate.com"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Publication",
+      "publisher": "Company",
+      "releaseDate": "2014-10-01",
+      "url": "https://publication.com",
+      "summary": "Description…"
+    }
+  ],
+  "skills": [
+    {
+      "name": "HTML",
+      "level": "Master",
+      "keywords": ["Web Development", "Frontend"]
+    },
+    {
+      "name": "Angular",
+      "level": "Master",
+      "keywords": ["Web Development", "Frontend"]
+    },
+    {
+      "name": "CSS",
+      "level": "Master",
+      "keywords": ["Web Development", "Frontend", "Responsive Design"]
+    },
+    {
+      "name": "JavaScript",
+      "level": "Master",
+      "keywords": ["Web Development", "Frontend", "Backend", "Fullstack"]
+    },
+    {
+      "name": "Tailwind",
+      "level": "Advanced",
+      "keywords": [
+        "Web Development",
+        "Frontend",
+        "CSS Framework",
+        "Responsive Design"
+      ]
+    },
+    {
+      "name": "TypeScript",
+      "level": "Advanced",
+      "keywords": [
+        "Web Development",
+        "Frontend",
+        "Backend",
+        "JavaScript Superset"
+      ]
+    },
+    {
+      "name": "Node",
+      "level": "Advanced",
+      "keywords": ["Web Development", "Backend", "JavaScript", "Server"]
+    },
+    {
+      "name": "MySQL",
+      "level": "Advanced",
+      "keywords": ["Databases", "SQL", "Data Storage", "Backend"]
+    },
+    {
+      "name": "Git",
+      "level": "Advanced",
+      "keywords": ["Version Control", "Collaboration", "Source Code"]
+    },
+    {
+      "name": "GitHub",
+      "level": "Advanced",
+      "keywords": ["Version Control", "Collaboration", "Source Code", "Git"]
+    },
+    {
+      "name": "Next.js",
+      "level": "Advanced",
+      "keywords": [
+        "Web Development",
+        "Frontend",
+        "React Framework",
+        "SSR",
+        "Static Generation"
+      ]
+    },
+    {
+      "name": "React",
+      "level": "Advanced",
+      "keywords": ["Web Development", "Frontend", "JavaScript Library", "UI"]
+    },
+    {
+      "name": "CSharp",
+      "level": "Advanced",
+      "keywords": ["Web Development", "Backend", ".NET", "APIs"]
+    },
+    {
+      "name": "SQLServer",
+      "level": "Advanced",
+      "keywords": ["Databases", "Backend", ".NET", "APIs"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "Spanish",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "English",
+      "fluency": "Advanced"
+    }
+  ],
+  "interests": [
+    {
+      "name": "Photography",
+      "keywords": ["Hobby"]
+    }
+  ],
+  "references": [],
+  "projects": [
+    {
+      "name": "Quiosco App",
+      "isActive": true,
+      "description": "Restaurant kiosk app to order food contactlessly from your mobile device, inspired by technologies used by multinational companies such as McDonald's or Starbucks. The stack used for this project includes ReactVite connected to PrismaDB with PrismaORM. I continue to improve it privately, and it’s available for commercial sale.",
+      "highlights": ["Kiosk", "Restaurant"],
+      "url": "https://github.com/casobrino/quiosco-next",
+      "github": "https://github.com/casobrino/quiosco-next"
+    },
+    {
+      "name": "Task Manager",
+      "isActive": false,
+      "description": "Task management application with authentication and real-time database, supporting collaborative task sharing. My own version inspired by Trello.",
+      "highlights": ["Manager", "Trello"],
+      "url": "https://github.com/casobrino/taskManager"
+    },
+    {
+      "name": "E-commerce .NET Core 9",
+      "isActive": true,
+      "description": "This is an API project mainly used to stay up-to-date with new versions of various NuGet packages. The project uses Mapster for custom mapping between DTOs, Identity for authentication, and Swagger for documentation. Data persistence is handled via SQL Server.",
+      "highlights": ["e-commerce", "API"],
+      "url": "https://github.com/casobrino/console-task-manager"
+    }
+  ]
+}

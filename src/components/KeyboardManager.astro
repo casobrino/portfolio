@@ -1,8 +1,8 @@
 ---
-import 'hotkeypad/reset.css'
-import 'hotkeypad/index.css'
+import "hotkeypad/reset.css"
+import "hotkeypad/index.css"
 import { type SocialIcon } from "@/types"
-import { basics } from "@cv"
+import { basics } from "@cv_es"
 
 const { profiles } = basics
 
@@ -40,7 +40,7 @@ const SOCIAL_ICONS: SocialIcon = {
     d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"
   ></path></svg
 >
-`
+`,
 }
 
 const profilesInfo = profiles.map(({ network, url }) => {
@@ -53,7 +53,7 @@ const profilesInfo = profiles.map(({ network, url }) => {
     title: `Visitar ${network}`,
     url,
     icon,
-    hotkey: `ctrl+${firstLetter}`
+    hotkey: `ctrl+${firstLetter}`,
   }
 })
 ---
@@ -106,20 +106,18 @@ const profilesInfo = profiles.map(({ network, url }) => {
   const info = hotkeypad.instance.getAttribute("data-info") ?? "[]"
   const parsedInfo = JSON.parse(info) as Info[]
 
-  const data = parsedInfo.map(
-    ({ url, hotkey, icon, id, section, title }) => {
-      return {
-        id,
-        title,
-        icon,
-        hotkey,
-        section,
-        handler: () => {
-          window.open(url, "_blank")
-        }
-      }
+  const data = parsedInfo.map(({ url, hotkey, icon, id, section, title }) => {
+    return {
+      id,
+      title,
+      icon,
+      hotkey,
+      section,
+      handler: () => {
+        window.open(url, "_blank")
+      },
     }
-  )
+  })
   hotkeypad.setCommands([
     {
       id: "print",
@@ -131,9 +129,25 @@ const profilesInfo = profiles.map(({ network, url }) => {
       section: "Acciones",
       handler: () => {
         window.print()
-      }
+      },
     },
-    ...data
+    {
+      id: "changeLen",
+      title: "cambiar de idioma",
+      icon: `<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m13 19 3.5-9 3.5 9m-6.125-2h5.25M3 7h7m0 0h2m-2 0c0 1.63-.793 3.926-2.239 5.655M7.5 6.818V5m.261 7.655C6.79 13.82 5.521 14.725 4 15m3.761-2.345L5 10m2.761 2.655L10.2 15"/>
+</svg>`,
+      hotkey: "ctrl+H",
+      section: "Acciones",
+      handler: () => {
+        const currentUrl = window.location.href
+        const newUrl = currentUrl.includes("/en/")
+          ? currentUrl.replace("/en/", "/es/")
+          : currentUrl.replace("/es/", "/en/")
+        window.location.href = newUrl
+      },
+    },
+    ...data,
   ])
 
   const footerButton = document.getElementById("footer-button")
@@ -146,7 +160,7 @@ const profilesInfo = profiles.map(({ network, url }) => {
       ctrlKey: true,
       altKey: false,
       shiftKey: false,
-      metaKey: false
+      metaKey: false,
     })
 
     document.dispatchEvent(event)

@@ -2,20 +2,43 @@
 import GitHub from "@/icons/GitHub.astro"
 import Section from "../Section.astro"
 
-import { projects } from "@cv"
+import { getLangFromUrl, useTranslations } from "../../i18n/utils"
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+const projects = t("projects")
+const title = Astro.props.title
 ---
 
-<Section title="Proyectos">
+<Section title={title}>
   <ul>
     {
       projects.map(
-        ({ url, description, highlights, name, isActive, github }) => {
+        ({
+          url,
+          description,
+          highlights,
+          name,
+          isActive,
+          github,
+        }: {
+          url: string
+          description: string
+          highlights: string[]
+          name: string
+          isActive: boolean
+          github?: string
+        }) => {
           return (
             <li>
               <article>
                 <header>
                   <h3>
-                    <a href={url} target="_blank" title={`Ver el proyecto ${name}`}>
+                    <a
+                      href={url}
+                      target="_blank"
+                      title={`Ver el proyecto ${name}`}
+                    >
                       {name}
                     </a>
                     {isActive && <span>•</span>}
@@ -33,7 +56,7 @@ import { projects } from "@cv"
                   <p>{description}</p>
                 </header>
                 <footer>
-                  {highlights.map((highlight) => {
+                  {highlights.map((highlight: string) => {
                     return <span>{highlight}</span>
                   })}
                 </footer>

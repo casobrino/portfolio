@@ -1,0 +1,50 @@
+---
+import Layout from "@/layouts/Layout.astro"
+import { getLangFromUrl, useTranslations } from "../../i18n/utils"
+
+const lang = getLangFromUrl(Astro.url)
+
+import About from "@/components/sections/About.astro"
+import Education from "@/components/sections/Education.astro"
+import Experience from "@/components/sections/Experience.astro"
+import Hero from "@/components/sections/Hero.astro"
+import Projects from "@/components/sections/Projects.astro"
+import Skills from "@/components/sections/Skills.astro"
+import KeyboardManager from "@/components/KeyboardManager.astro"
+
+import { basics } from "@cv_en"
+const { name, label } = basics
+const AboutTitle = lang === "en" ? "About me" : "Sobre mí"
+const ExperienceTitle =
+  lang === "en" ? "Work Experience" : "Experiencia laboral"
+const EducationTitle = lang === "en" ? "Education" : "Educación"
+const ProjectsTitle = lang === "en" ? "Projects" : "Proyectos"
+const SkillsTitle = lang === "en" ? "Skills" : "Habilidades"
+---
+
+<Layout title={`Portafolio de ${name} - ${label}`}>
+  <main>
+    <Hero lang={lang} />
+    <About title={AboutTitle} />
+    <Experience title={ExperienceTitle} />
+    <Education title={EducationTitle} />
+    <Projects title={ProjectsTitle} />
+    <Skills title={SkillsTitle} />
+  </main>
+
+  <KeyboardManager />
+</Layout>
+
+<style>
+  main {
+    padding: 4rem;
+    margin: auto;
+    width: 100%;
+  }
+
+  @media (width <= 700px) {
+    main {
+      padding: 2rem;
+    }
+  }
+</style>

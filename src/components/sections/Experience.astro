@@ -1,14 +1,36 @@
 ---
 import Section from "../Section.astro"
+import { getLangFromUrl, useTranslations } from "../../i18n/utils"
 
-import { work } from "@cv"
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const work2 = t("work")
+const title = Astro.props.title
 ---
 
-<Section title="Experiencia laboral">
+<Section title={title}>
   <ul>
     {
-      work.map(
-        ({ name, startDate, endDate, position, summary, highlights, url }) => {
+      work2.map(
+        (
+          {
+            name,
+            startDate,
+            endDate,
+            position,
+            summary,
+            highlights,
+            url
+          }: {
+            name: string
+            startDate: string
+            endDate: string | null
+            position: string
+            summary: string
+            highlights: string[]
+            url: string
+          }
+        ) => {
           const startYear = new Date(startDate).getFullYear()
           const endYear =
             endDate != null ? new Date(endDate).getFullYear() : "Actual"
@@ -27,16 +49,12 @@ import { work } from "@cv"
                   </div>
 
                   <div>
-                    <time 
-                      datetime={startDate}
-                      data-title={startDate}>
-                        {startYear}
+                    <time datetime={startDate} data-title={startDate}>
+                      {startYear}
                     </time>
                     {" - "}
-                    <time 
-                      datetime={endDate}
-                      data-title={endDate}>
-                        {endYear}
+                    <time datetime={endDate} data-title={endDate}>
+                      {endYear}
                     </time>
                   </div>
                 </header>
@@ -102,10 +120,15 @@ import { work } from "@cv"
     content: attr(data-title);
     background-color: #333;
     color: #fff;
-    font-size: .75rem;
-    font-family: Menlo, Monaco, Lucida Console, "Courier New", monospace;;
+    font-size: 0.75rem;
+    font-family:
+      Menlo,
+      Monaco,
+      Lucida Console,
+      "Courier New",
+      monospace;
     position: absolute;
-    padding: .2rem .5rem;
+    padding: 0.2rem 0.5rem;
     bottom: -1.4rem;
     left: 50%;
     white-space: nowrap;

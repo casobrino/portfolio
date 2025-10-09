@@ -1,12 +1,17 @@
 ---
-import Section from "../Section.astro"
+import Section from "@/components/Section.astro"
 
-import { basics } from "@cv"
+import { basics } from "@cv_es"
 const { summary } = basics
+import { getLangFromUrl, useTranslations } from "../../i18n/utils"
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const title = Astro.props.title
 ---
 
-<Section title="Sobre mí">
+<Section title={title}>
   <p>
-    {summary}
+    {t("basics").summary}
   </p>
 </Section>
