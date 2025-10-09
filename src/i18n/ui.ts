@@ -4,7 +4,7 @@ export const languages = {
 }
 import CV_ES from '@cv_es'
 import CV_EN from '@cv_en'
-console.log('CV_ES', CV_ES.basics.summary)
+
 export const defaultLang = 'es'
 
 export const ui = {
