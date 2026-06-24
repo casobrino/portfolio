@@ -7,5 +7,6 @@
       "@cv_en": ["./cv_en.json"],
       "@/*": ["src/*"]
     }
-  }
+  },
+  "exclude": ["src/plugins"]
 }

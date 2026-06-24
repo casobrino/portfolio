@@ -1,4 +1,6 @@
 ---
+import PageNav from "@/components/PageNav.astro"
+import { getLangFromUrl } from "@/i18n/utils"
 import { basics } from "@cv_es"
 
 interface Props {
@@ -6,12 +8,13 @@ interface Props {
 }
 
 const { title } = Astro.props
+const lang = getLangFromUrl(Astro.url)
 
 const { image, summary, url } = basics
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <title>{title}</title>
@@ -32,13 +35,29 @@ const { image, summary, url } = basics
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={summary} />
     <meta name="twitter:image" content="" />
+
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem("theme")
+        const theme =
+          stored === "light" || stored === "dark"
+            ? stored
+            : window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light"
+        document.documentElement.dataset.theme = theme
+      })()
+    </script>
   </head>
   <body>
+    <PageNav />
     <slot />
   </body>
 </html>
 
 <style is:global>
+  @import "../styles/theme.css";
+
   html {
     font-family:
       Menlo,
@@ -47,14 +66,18 @@ const { image, summary, url } = basics
       "Courier New",
       Courier,
       monospace;
-    background: #fff;
+    background: var(--color-bg);
+    color: var(--color-text);
     letter-spacing: -0.025rem;
+    transition: background 0.2s ease, color 0.2s ease;
   }
 
   body,
   figure {
     margin: 0;
     padding: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
   }
 
   a {
@@ -78,6 +101,7 @@ const { image, summary, url } = basics
   h3,
   h4 {
     margin: 0;
+    color: var(--color-text);
     font-family:
       system-ui,
       -apple-system,
@@ -93,7 +117,7 @@ const { image, summary, url } = basics
   }
 
   p {
-    color: #666;
+    color: var(--color-text-secondary);
     font-size: 0.9rem;
     line-height: 1.5;
     margin: 0;

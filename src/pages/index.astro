@@ -1,3 +1,63 @@
 ---
-return Astro.redirect("/es/")
+import Layout from "@/layouts/Layout.astro"
+
+import About from "@/components/sections/About.astro"
+import Hero from "@/components/sections/Hero.astro"
+import PortfolioPreview from "@/components/PortfolioPreview.astro"
+import PhotoPreview from "@/components/PhotoPreview.astro"
+import KeyboardManager from "@/components/KeyboardManager.astro"
+import { getPageTranslations, getRoutes } from "@/i18n/utils"
+
+import { basics } from "@cv_es"
+const { name, label } = basics
+
+const lang = "es"
+const t = getPageTranslations(lang)
+const routes = getRoutes(lang)
 ---
+
+<Layout title={`${name} — ${label}`}>
+  <main>
+    <Hero lang={lang} />
+    <About />
+    <a class="cv-link" href={routes.cv}>
+      {t.home.viewCv} →
+    </a>
+    <PortfolioPreview lang={lang} />
+    <PhotoPreview lang={lang} />
+  </main>
+
+  <KeyboardManager lang={lang} />
+</Layout>
+
+<style>
+  main {
+    padding: 4rem;
+    margin: auto;
+    width: 100%;
+  }
+
+  .cv-link {
+    display: block;
+    max-width: 700px;
+    margin: -24px auto 48px;
+    font-size: 0.85rem;
+    color: var(--color-text);
+    font-family: system-ui, sans-serif;
+  }
+
+  .cv-link:hover {
+    text-decoration: underline;
+  }
+
+  @media (width <= 700px) {
+    main {
+      padding: 2rem;
+    }
+
+    .cv-link {
+      margin-bottom: 38px;
+      text-align: center;
+    }
+  }
+</style>

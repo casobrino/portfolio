@@ -1,0 +1,880 @@
+---
+import type { AdminData } from "@/scripts/admin-panel"
+import ThemeToggle from "@/components/ThemeToggle.astro"
+
+interface Props {
+  initialData: AdminData
+}
+
+const { initialData } = Astro.props
+---
+
+<div class="admin" id="admin-root" data-initial={JSON.stringify(initialData)}>
+  <header class="admin-header">
+    <div class="admin-brand">
+      <span class="admin-badge">Admin</span>
+      <h1>Panel de administración</h1>
+      <p>Gestiona fotos, portafolio y CV. Los cambios se guardan en disco al usar <code>pnpm dev</code>.</p>
+    </div>
+    <div class="header-actions">
+      <label class="password-field">
+        <span>Contraseña</span>
+        <input
+          id="admin-password"
+          type="password"
+          placeholder="Opcional si está configurada"
+          autocomplete="current-password"
+        />
+      </label>
+      <div class="header-links">
+        <ThemeToggle />
+        <a class="back-link" href="/">← Volver al sitio</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="admin-tabs" id="admin-tabs" aria-label="Secciones">
+    <button type="button" class="tab active" data-tab="photos">Fotos</button>
+    <button type="button" class="tab" data-tab="portfolio">Portafolio</button>
+    <button type="button" class="tab" data-tab="cv_es">CV Español</button>
+    <button type="button" class="tab" data-tab="cv_en">CV Inglés</button>
+  </nav>
+
+  <div id="admin-status" class="status" hidden></div>
+
+  <main id="admin-content" class="admin-content"></main>
+</div>
+
+<script>
+  import {
+    type AdminData,
+    type AdminFileKey,
+    downloadJson,
+    emptyPhoto,
+    emptyProject,
+    getStoredPassword,
+    saveToServer,
+    setStoredPassword,
+  } from "@/scripts/admin-panel"
+  import type { PortfolioProject } from "@/types"
+
+  const root = document.getElementById("admin-root")!
+  const content = document.getElementById("admin-content")!
+  const statusEl = document.getElementById("admin-status")!
+  const passwordInput = document.getElementById("admin-password") as HTMLInputElement
+
+  let data = JSON.parse(root.getAttribute("data-initial") ?? "{}") as AdminData
+  let activeTab: AdminFileKey = "photos"
+
+  passwordInput.value = getStoredPassword()
+  passwordInput.addEventListener("change", () => {
+    setStoredPassword(passwordInput.value)
+  })
+
+  function showStatus(message: string, type: "success" | "error" | "info" = "info") {
+    statusEl.hidden = false
+    statusEl.textContent = message
+    statusEl.dataset.type = type
+  }
+
+  function field(label: string, id: string, value: string, type = "text", placeholder = "") {
+    return `
+      <label class="field">
+        <span>${label}</span>
+        <input id="${id}" type="${type}" value="${escapeAttr(value)}" placeholder="${escapeAttr(placeholder)}" />
+      </label>
+    `
+  }
+
+  function textareaField(label: string, id: string, value: string, rows = 4) {
+    return `
+      <label class="field">
+        <span>${label}</span>
+        <textarea id="${id}" rows="${rows}">${escapeHtml(value)}</textarea>
+      </label>
+    `
+  }
+
+  function checkboxField(label: string, id: string, checked: boolean) {
+    return `
+      <label class="field checkbox">
+        <input id="${id}" type="checkbox" ${checked ? "checked" : ""} />
+        <span>${label}</span>
+      </label>
+    `
+  }
+
+  function escapeAttr(value: string) {
+    return value.replace(/"/g, "&quot;")
+  }
+
+  function escapeHtml(value: string) {
+    return value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+  }
+
+  function renderPhotos() {
+    content.innerHTML = `
+      <div class="panel-head">
+        <h2>Fotografías (${data.photos.length})</h2>
+        <div class="panel-actions">
+          <button type="button" class="btn" id="add-photo">+ Añadir foto</button>
+          <button type="button" class="btn primary" id="save-photos">Guardar</button>
+          <button type="button" class="btn" id="export-photos">Exportar JSON</button>
+        </div>
+      </div>
+      <p class="hint">Coloca las imágenes en <code>public/photos/</code> y referencia la ruta en <code>src</code>.</p>
+      <div class="cards">
+        ${
+          data.photos.length === 0
+            ? `<p class="empty-state">No hay fotos. Pulsa "Añadir foto" para crear la primera entrada.</p>`
+            : data.photos
+          .map(
+            (photo, index) => `
+          <article class="card">
+            <div class="card-layout">
+              <div class="card-preview">
+                <img src="${escapeAttr(photo.src)}" alt="${escapeAttr(photo.alt)}" loading="lazy" onerror="this.src='/favicon.svg'" />
+              </div>
+              <div class="card-fields">
+                <div class="card-title-row">
+                  <h3>Foto ${index + 1}</h3>
+                  <button type="button" class="btn danger btn-sm delete-photo" data-index="${index}">Eliminar</button>
+                </div>
+                ${field("Ruta de imagen", `photo-src-${index}`, photo.src, "text", "/photos/mi-foto.jpg")}
+                <div class="field-row">
+                  ${field("Texto alternativo", `photo-alt-${index}`, photo.alt)}
+                  ${field("Fecha (YYYY-MM)", `photo-date-${index}`, photo.date)}
+                </div>
+                ${field("Caption", `photo-caption-${index}`, photo.caption)}
+                ${field("Ubicación", `photo-location-${index}`, photo.location)}
+              </div>
+            </div>
+          </article>
+        `
+          )
+          .join("")
+        }
+      </div>
+    `
+
+    document.getElementById("add-photo")?.addEventListener("click", () => {
+      data.photos.push(emptyPhoto())
+      renderPhotos()
+    })
+
+    document.getElementById("save-photos")?.addEventListener("click", () => savePhotos())
+    document.getElementById("export-photos")?.addEventListener("click", () => {
+      downloadJson("photos.json", data.photos)
+      showStatus("photos.json descargado.", "success")
+    })
+
+    content.querySelectorAll(".delete-photo").forEach((button) => {
+      button.addEventListener("click", () => {
+        const index = Number(button.getAttribute("data-index"))
+        data.photos.splice(index, 1)
+        renderPhotos()
+      })
+    })
+  }
+
+  function collectPhotos() {
+    data.photos = data.photos.map((_photo, index) => ({
+      src: getInputValue(`photo-src-${index}`),
+      alt: getInputValue(`photo-alt-${index}`),
+      caption: getInputValue(`photo-caption-${index}`),
+      location: getInputValue(`photo-location-${index}`),
+      date: getInputValue(`photo-date-${index}`),
+    }))
+  }
+
+  function renderPortfolio() {
+    content.innerHTML = `
+      <div class="panel-head">
+        <h2>Portafolio (${data.portfolio.length})</h2>
+        <div class="panel-actions">
+          <button type="button" class="btn" id="add-project">+ Añadir proyecto</button>
+          <button type="button" class="btn primary" id="save-portfolio">Guardar</button>
+          <button type="button" class="btn" id="export-portfolio">Exportar JSON</button>
+        </div>
+      </div>
+      <p class="hint">Imágenes en <code>public/portfolio/</code>. Tags separados por comas.</p>
+      <div class="cards">
+        ${
+          data.portfolio.length === 0
+            ? `<p class="empty-state">No hay proyectos. Pulsa "Añadir proyecto" para empezar.</p>`
+            : data.portfolio
+          .map(
+            (project, index) => `
+          <article class="card">
+            <div class="card-layout">
+              <div class="card-preview card-preview--tall">
+                <img src="${escapeAttr(project.image)}" alt="${escapeAttr(project.title)}" loading="lazy" onerror="this.src='/favicon.svg'" />
+              </div>
+              <div class="card-fields">
+                <div class="card-title-row">
+                  <h3>${escapeHtml(project.title) || `Proyecto ${index + 1}`}</h3>
+                  <button type="button" class="btn danger btn-sm delete-project" data-index="${index}">Eliminar</button>
+                </div>
+                ${field("Título", `project-title-${index}`, project.title)}
+                ${textareaField("Descripción", `project-desc-${index}`, project.description, 4)}
+                <div class="field-row">
+                  ${field("Imagen", `project-image-${index}`, project.image)}
+                  ${field("Año", `project-year-${index}`, String(project.year), "number")}
+                </div>
+                ${field("Tags (separados por coma)", `project-tags-${index}`, project.tags.join(", "))}
+                <div class="field-row">
+                  ${field("Link demo", `project-live-${index}`, project.links.live ?? "")}
+                  ${field("GitHub", `project-github-${index}`, project.links.github ?? "")}
+                </div>
+                ${checkboxField("Destacado", `project-featured-${index}`, project.featured)}
+              </div>
+            </div>
+          </article>
+        `
+          )
+          .join("")
+        }
+      </div>
+    `
+
+    document.getElementById("add-project")?.addEventListener("click", () => {
+      data.portfolio.push(emptyProject())
+      renderPortfolio()
+    })
+
+    document.getElementById("save-portfolio")?.addEventListener("click", () => savePortfolio())
+    document.getElementById("export-portfolio")?.addEventListener("click", () => {
+      downloadJson("portfolio.json", data.portfolio)
+      showStatus("portfolio.json descargado.", "success")
+    })
+
+    content.querySelectorAll(".delete-project").forEach((button) => {
+      button.addEventListener("click", () => {
+        const index = Number(button.getAttribute("data-index"))
+        data.portfolio.splice(index, 1)
+        renderPortfolio()
+      })
+    })
+  }
+
+  function collectPortfolio() {
+    data.portfolio = data.portfolio.map((_project, index) => {
+      const tags = getInputValue(`project-tags-${index}`)
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean)
+
+      const live = getInputValue(`project-live-${index}`)
+      const github = getInputValue(`project-github-${index}`)
+
+      return {
+        title: getInputValue(`project-title-${index}`),
+        description: getInputValue(`project-desc-${index}`),
+        image: getInputValue(`project-image-${index}`),
+        tags,
+        year: Number(getInputValue(`project-year-${index}`)),
+        featured: getCheckboxValue(`project-featured-${index}`),
+        links: {
+          ...(live ? { live } : {}),
+          ...(github ? { github } : {}),
+        },
+      } satisfies PortfolioProject
+    })
+  }
+
+  function renderCv(tab: "cv_es" | "cv_en") {
+    const label = tab === "cv_es" ? "CV Español" : "CV Inglés"
+    const filename = tab === "cv_es" ? "cv_es.json" : "cv_en.json"
+    const jsonText = JSON.stringify(data[tab], null, 2)
+
+    content.innerHTML = `
+      <div class="panel-head">
+        <h2>${label}</h2>
+        <div class="panel-actions">
+          <button type="button" class="btn" id="format-cv">Formatear</button>
+          <button type="button" class="btn primary" id="save-cv">Guardar</button>
+          <button type="button" class="btn" id="export-cv">Exportar JSON</button>
+          <label class="btn file-btn">
+            Importar
+            <input type="file" id="import-cv" accept="application/json" hidden />
+          </label>
+        </div>
+      </div>
+      <p class="hint">Edita el JSON completo del CV. Usa "Formatear" para validar la sintaxis.</p>
+      <textarea id="cv-editor" class="json-editor" spellcheck="false">${escapeHtml(jsonText)}</textarea>
+    `
+
+    document.getElementById("format-cv")?.addEventListener("click", () => {
+      try {
+        const parsed = JSON.parse(getEditorValue())
+        setEditorValue(JSON.stringify(parsed, null, 2))
+        showStatus("JSON válido y formateado.", "success")
+      } catch {
+        showStatus("JSON inválido. Revisa la sintaxis.", "error")
+      }
+    })
+
+    document.getElementById("save-cv")?.addEventListener("click", () => saveCv(tab))
+    document.getElementById("export-cv")?.addEventListener("click", () => {
+      try {
+        const parsed = JSON.parse(getEditorValue())
+        downloadJson(filename, parsed)
+        showStatus(`${filename} descargado.`, "success")
+      } catch {
+        showStatus("JSON inválido. No se puede exportar.", "error")
+      }
+    })
+
+    document.getElementById("import-cv")?.addEventListener("change", async (event) => {
+      const file = (event.target as HTMLInputElement).files?.[0]
+      if (!file) return
+      const text = await file.text()
+      setEditorValue(text)
+      showStatus(`${file.name} cargado en el editor.`, "info")
+    })
+  }
+
+  function getInputValue(id: string) {
+    return (document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement)?.value ?? ""
+  }
+
+  function getCheckboxValue(id: string) {
+    return (document.getElementById(id) as HTMLInputElement)?.checked ?? false
+  }
+
+  function getEditorValue() {
+    return (document.getElementById("cv-editor") as HTMLTextAreaElement)?.value ?? ""
+  }
+
+  function setEditorValue(value: string) {
+    const editor = document.getElementById("cv-editor") as HTMLTextAreaElement
+    if (editor) editor.value = value
+  }
+
+  async function persist(file: AdminFileKey, payload: unknown, successMessage: string) {
+    setStoredPassword(passwordInput.value)
+
+    try {
+      await saveToServer(file, payload, passwordInput.value)
+      showStatus(successMessage, "success")
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Error al guardar"
+      showStatus(
+        `${message}. Si estás en producción, usa Exportar JSON y reemplaza el archivo manualmente.`,
+        "error"
+      )
+    }
+  }
+
+  async function savePhotos() {
+    collectPhotos()
+    await persist("photos", data.photos, "Fotos guardadas en src/data/photos.json")
+    renderPhotos()
+  }
+
+  async function savePortfolio() {
+    collectPortfolio()
+    await persist("portfolio", data.portfolio, "Portafolio guardado en src/data/portfolio.json")
+    renderPortfolio()
+  }
+
+  async function saveCv(tab: "cv_es" | "cv_en") {
+    try {
+      const parsed = JSON.parse(getEditorValue())
+      data[tab] = parsed
+      const filename = tab === "cv_es" ? "cv_es.json" : "cv_en.json"
+      await persist(tab, parsed, `${filename} guardado correctamente`)
+      renderCv(tab)
+    } catch {
+      showStatus("JSON inválido. Corrige los errores antes de guardar.", "error")
+    }
+  }
+
+  function renderActiveTab() {
+    if (activeTab === "photos") renderPhotos()
+    else if (activeTab === "portfolio") renderPortfolio()
+    else renderCv(activeTab)
+  }
+
+  document.getElementById("admin-tabs")?.addEventListener("click", (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>(".tab")
+    if (!button) return
+
+    activeTab = button.dataset.tab as AdminFileKey
+    document.querySelectorAll(".tab").forEach((tab) => tab.classList.remove("active"))
+    button.classList.add("active")
+    statusEl.hidden = true
+    renderActiveTab()
+  })
+
+  renderActiveTab()
+</script>
+
+<style is:global>
+  #admin-root {
+    --admin-radius: 12px;
+    --admin-radius-sm: 8px;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  #admin-root .admin-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    flex-wrap: wrap;
+  }
+
+  #admin-root .admin-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    margin-bottom: 0.6rem;
+  }
+
+  #admin-root h1 {
+    margin: 0 0 0.5rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  #admin-root .admin-header p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    max-width: 520px;
+  }
+
+  #admin-root code {
+    font-family: Menlo, Monaco, monospace;
+    font-size: 0.85em;
+    background: var(--color-bg-muted);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid var(--color-border-subtle);
+  }
+
+  #admin-root .header-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 240px;
+  }
+
+  #admin-root .password-field {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  #admin-root .password-field span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
+  }
+
+  #admin-root #admin-password {
+    padding: 0.6rem 0.85rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--admin-radius-sm);
+    background: var(--color-bg-subtle);
+    color: var(--color-text);
+    font-size: 0.9rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  #admin-root #admin-password:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 20%, transparent);
+  }
+
+  #admin-root .header-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+
+  #admin-root .back-link {
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  #admin-root .back-link:hover {
+    color: var(--color-text);
+    text-decoration: underline;
+  }
+
+  #admin-root .admin-tabs {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    padding: 0.35rem;
+    background: var(--color-bg-muted);
+    border-radius: var(--admin-radius);
+    border: 1px solid var(--color-border);
+  }
+
+  #admin-root .tab {
+    border: none;
+    background: transparent;
+    color: var(--color-text-secondary);
+    padding: 0.55rem 1rem;
+    border-radius: var(--admin-radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.15s ease;
+  }
+
+  #admin-root .tab:hover {
+    color: var(--color-text);
+    background: var(--color-bg-hover);
+  }
+
+  #admin-root .tab.active {
+    background: var(--color-bg);
+    color: var(--color-text);
+    box-shadow: 0 1px 3px var(--color-shadow);
+  }
+
+  #admin-root .status {
+    padding: 0.85rem 1rem;
+    border-radius: var(--admin-radius-sm);
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-subtle);
+    line-height: 1.4;
+  }
+
+  #admin-root .status[data-type="success"] {
+    border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
+    background: color-mix(in srgb, var(--color-accent) 8%, var(--color-bg-subtle));
+    color: var(--color-accent);
+  }
+
+  #admin-root .status[data-type="error"] {
+    border-color: color-mix(in srgb, #e55 50%, transparent);
+    background: color-mix(in srgb, #e55 8%, var(--color-bg-subtle));
+    color: #e55;
+  }
+
+  #admin-root .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--admin-radius);
+  }
+
+  #admin-root .panel-head h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  #admin-root .panel-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  #admin-root .hint {
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    margin: 0.75rem 0 1.25rem;
+    line-height: 1.5;
+  }
+
+  #admin-root .btn {
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-text);
+    padding: 0.5rem 0.95rem;
+    border-radius: var(--admin-radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    font-family: inherit;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+    white-space: nowrap;
+  }
+
+  #admin-root .btn:hover {
+    background: var(--color-bg-hover);
+    border-color: var(--color-border-strong);
+  }
+
+  #admin-root .btn:active {
+    transform: scale(0.98);
+  }
+
+  #admin-root .btn.primary {
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-color: var(--color-text);
+  }
+
+  #admin-root .btn.primary:hover {
+    opacity: 0.88;
+    background: var(--color-text);
+  }
+
+  #admin-root .btn.danger {
+    color: #e55;
+    border-color: color-mix(in srgb, #e55 40%, var(--color-border));
+    background: color-mix(in srgb, #e55 6%, var(--color-bg));
+  }
+
+  #admin-root .btn.danger:hover {
+    background: color-mix(in srgb, #e55 12%, var(--color-bg));
+    border-color: #e55;
+  }
+
+  #admin-root .btn-sm {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.78rem;
+  }
+
+  #admin-root .file-btn {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  #admin-root .cards {
+    display: grid;
+    gap: 1rem;
+  }
+
+  #admin-root .empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--admin-radius);
+    background: var(--color-bg-subtle);
+    margin: 0;
+  }
+
+  #admin-root .card {
+    border: 1px solid var(--color-border);
+    border-radius: var(--admin-radius);
+    padding: 1.25rem;
+    background: var(--color-bg-subtle);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  #admin-root .card:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: 0 2px 8px var(--color-shadow);
+  }
+
+  #admin-root .card-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  #admin-root .card-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  #admin-root .card-title-row h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  #admin-root .card-preview {
+    border-radius: var(--admin-radius-sm);
+    overflow: hidden;
+    background: var(--color-bg-muted);
+    border: 1px solid var(--color-border);
+    aspect-ratio: 4 / 3;
+  }
+
+  #admin-root .card-preview--tall {
+    aspect-ratio: 16 / 10;
+  }
+
+  #admin-root .card-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  #admin-root .card-fields {
+    display: grid;
+    gap: 0.85rem;
+    min-width: 0;
+  }
+
+  #admin-root .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+  }
+
+  #admin-root .field {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    min-width: 0;
+  }
+
+  #admin-root .field > span {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  #admin-root .field input,
+  #admin-root .field textarea,
+  #admin-root .json-editor {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--admin-radius-sm);
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  #admin-root .field input:focus,
+  #admin-root .field textarea:focus,
+  #admin-root .json-editor:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 18%, transparent);
+  }
+
+  #admin-root .field textarea,
+  #admin-root .json-editor {
+    resize: vertical;
+    font-family: Menlo, Monaco, "Courier New", monospace;
+    line-height: 1.55;
+  }
+
+  #admin-root .field.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--admin-radius-sm);
+    cursor: pointer;
+  }
+
+  #admin-root .field.checkbox input {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--color-accent);
+    cursor: pointer;
+  }
+
+  #admin-root .field.checkbox span {
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.85rem;
+    color: var(--color-text);
+  }
+
+  #admin-root .json-editor {
+    min-height: 520px;
+    margin-top: 0.5rem;
+    border-radius: var(--admin-radius);
+    border-color: var(--color-border-strong);
+  }
+
+  @media (width <= 800px) {
+    #admin-root .card-layout {
+      grid-template-columns: 1fr;
+    }
+
+    #admin-root .card-preview {
+      max-height: 200px;
+      aspect-ratio: auto;
+    }
+
+    #admin-root .card-preview img {
+      max-height: 200px;
+    }
+
+    #admin-root .field-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (width <= 700px) {
+    #admin-root {
+      padding: 1.25rem 1rem 3rem;
+    }
+
+    #admin-root .admin-header {
+      flex-direction: column;
+    }
+
+    #admin-root .header-actions {
+      width: 100%;
+    }
+
+    #admin-root .header-links {
+      justify-content: space-between;
+    }
+
+    #admin-root .panel-head {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    #admin-root .panel-actions {
+      justify-content: stretch;
+    }
+
+    #admin-root .panel-actions .btn {
+      flex: 1;
+      text-align: center;
+    }
+  }
+</style>

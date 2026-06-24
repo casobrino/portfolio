@@ -1,38 +1,34 @@
 ---
 import Layout from "@/layouts/Layout.astro"
-import { getLangFromUrl } from "../../i18n/utils"
+import { getLangFromUrl, getPageTranslations, getRoutes } from "../../i18n/utils"
 
 const lang = getLangFromUrl(Astro.url)
 
 import About from "@/components/sections/About.astro"
-import Education from "@/components/sections/Education.astro"
-import Experience from "@/components/sections/Experience.astro"
 import Hero from "@/components/sections/Hero.astro"
-import Projects from "@/components/sections/Projects.astro"
-import Skills from "@/components/sections/Skills.astro"
+import PortfolioPreview from "@/components/PortfolioPreview.astro"
+import PhotoPreview from "@/components/PhotoPreview.astro"
 import KeyboardManager from "@/components/KeyboardManager.astro"
 
 import { basics } from "@cv_en"
 const { name, label } = basics
-const AboutTitle = lang === "en" ? "About me" : "Sobre mí"
-const ExperienceTitle =
-  lang === "en" ? "Work Experience" : "Experiencia laboral"
-const EducationTitle = lang === "en" ? "Education" : "Educación"
-const ProjectsTitle = lang === "en" ? "Projects" : "Proyectos"
-const SkillsTitle = lang === "en" ? "Skills" : "Habilidades"
+const t = getPageTranslations(lang)
+const routes = getRoutes(lang)
+const AboutTitle = "About me"
 ---
 
-<Layout title={`Portafolio de ${name} - ${label}`}>
+<Layout title={`${name} — ${label}`}>
   <main>
     <Hero lang={lang} />
     <About title={AboutTitle} />
-    <Experience title={ExperienceTitle} />
-    <Education title={EducationTitle} />
-    <Projects title={ProjectsTitle} />
-    <Skills title={SkillsTitle} />
+    <a class="cv-link" href={routes.cv}>
+      {t.home.viewCv} →
+    </a>
+    <PortfolioPreview lang={lang} />
+    <PhotoPreview lang={lang} />
   </main>
 
-  <KeyboardManager />
+  <KeyboardManager lang={lang} />
 </Layout>
 
 <style>
@@ -42,9 +38,27 @@ const SkillsTitle = lang === "en" ? "Skills" : "Habilidades"
     width: 100%;
   }
 
+  .cv-link {
+    display: block;
+    max-width: 700px;
+    margin: -24px auto 48px;
+    font-size: 0.85rem;
+    color: var(--color-text);
+    font-family: system-ui, sans-serif;
+  }
+
+  .cv-link:hover {
+    text-decoration: underline;
+  }
+
   @media (width <= 700px) {
     main {
       padding: 2rem;
+    }
+
+    .cv-link {
+      margin-bottom: 38px;
+      text-align: center;
     }
   }
 </style>

@@ -1,0 +1,214 @@
+---
+import type { Photo } from "@/types"
+import { getLangFromUrl, getPageTranslations } from "@/i18n/utils"
+
+interface Props {
+  photos: Photo[]
+}
+
+const { photos } = Astro.props
+const lang = getLangFromUrl(Astro.url)
+const t = getPageTranslations(lang)
+---
+
+<div class="gallery" data-photos={JSON.stringify(photos)}>
+  {
+    photos.map((photo, index) => (
+      <button
+        type="button"
+        class="photo-trigger"
+        data-index={index}
+        aria-label={photo.alt}
+      >
+        <img src={photo.src} alt={photo.alt} loading="lazy" width="400" height="300" />
+        <span class="photo-meta">
+          <span class="caption">{photo.caption}</span>
+          <span class="location">{photo.location}</span>
+        </span>
+      </button>
+    ))
+  }
+</div>
+
+<dialog id="lightbox" class="lightbox">
+  <button type="button" class="lightbox-close" aria-label={t.photos.close}>
+    &times;
+  </button>
+  <figure>
+    <img id="lightbox-img" alt="" />
+    <figcaption id="lightbox-caption"></figcaption>
+  </figure>
+</dialog>
+
+<script>
+  const gallery = document.querySelector(".gallery")
+  const dialog = document.getElementById("lightbox") as HTMLDialogElement
+  const lightboxImg = document.getElementById("lightbox-img") as HTMLImageElement
+  const lightboxCaption = document.getElementById("lightbox-caption") as HTMLElement
+  const closeBtn = document.querySelector(".lightbox-close")
+
+  if (gallery && dialog && lightboxImg && lightboxCaption) {
+    const photos = JSON.parse(gallery.getAttribute("data-photos") ?? "[]") as Array<{
+      src: string
+      alt: string
+      caption: string
+      location: string
+      date: string
+    }>
+
+    const openPhoto = (index: number) => {
+      const photo = photos[index]
+      if (!photo) return
+
+      lightboxImg.src = photo.src
+      lightboxImg.alt = photo.alt
+      lightboxCaption.textContent = `${photo.caption} — ${photo.location} (${photo.date})`
+      dialog.showModal()
+    }
+
+    gallery.querySelectorAll(".photo-trigger").forEach((trigger) => {
+      trigger.addEventListener("click", () => {
+        const index = Number(trigger.getAttribute("data-index"))
+        openPhoto(index)
+      })
+    })
+
+    closeBtn?.addEventListener("click", () => dialog.close())
+
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) {
+        dialog.close()
+      }
+    })
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && dialog.open) {
+        dialog.close()
+      }
+    })
+  }
+</script>
+
+<style>
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-inline: -16px;
+  }
+
+  .photo-trigger {
+    border: none;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: left;
+    border: 1px solid var(--color-border-subtle);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .photo-trigger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--color-shadow);
+  }
+
+  .photo-trigger img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+  }
+
+  .photo-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px;
+  }
+
+  .caption {
+    font-size: 0.8rem;
+    color: var(--color-text);
+    font-family: system-ui, sans-serif;
+  }
+
+  .location {
+    font-size: 0.7rem;
+    color: var(--color-text-faint);
+  }
+
+  .lightbox {
+    border: none;
+    border-radius: 8px;
+    padding: 0;
+    max-width: 90vw;
+    max-height: 90vh;
+    background: var(--color-bg);
+    overflow: hidden;
+  }
+
+  .lightbox::backdrop {
+    background: var(--color-dialog-backdrop);
+  }
+
+  .lightbox figure {
+    margin: 0;
+  }
+
+  .lightbox img {
+    display: block;
+    max-width: 90vw;
+    max-height: 75vh;
+    object-fit: contain;
+  }
+
+  .lightbox figcaption {
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    color: var(--color-text-label);
+    font-family: system-ui, sans-serif;
+    text-align: center;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    border: none;
+    background: var(--color-bg-subtle);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text);
+    z-index: 1;
+  }
+
+  .lightbox-close:hover {
+    background: var(--color-bg);
+  }
+
+  @media (width <= 700px) {
+    .gallery {
+      margin-inline: 0;
+    }
+
+    .photo-trigger {
+      border: none;
+      box-shadow: 0 1px 1px var(--color-border-subtle);
+    }
+  }
+
+  @media print {
+    .lightbox {
+      display: none !important;
+    }
+  }
+</style>

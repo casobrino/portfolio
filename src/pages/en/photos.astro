@@ -1,0 +1,45 @@
+---
+import Layout from "@/layouts/Layout.astro"
+import Section from "@/components/Section.astro"
+import PhotoGallery from "@/components/PhotoGallery.astro"
+import KeyboardManager from "@/components/KeyboardManager.astro"
+import photos from "@/data/photos.json"
+import { getPageTranslations } from "@/i18n/utils"
+import { basics } from "@cv_en"
+import type { Photo } from "@/types"
+
+const lang = "en"
+const t = getPageTranslations(lang)
+const { name } = basics
+const galleryPhotos = photos as Photo[]
+---
+
+<Layout title={`${t.photos.title} — ${name}`}>
+  <main>
+    <Section title={t.photos.title}>
+      <p class="subtitle">{t.photos.subtitle}</p>
+      <PhotoGallery photos={galleryPhotos} />
+    </Section>
+  </main>
+
+  <KeyboardManager lang={lang} />
+</Layout>
+
+<style>
+  main {
+    padding: 4rem;
+    margin: auto;
+    width: 100%;
+  }
+
+  .subtitle {
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+  }
+
+  @media (width <= 700px) {
+    main {
+      padding: 2rem;
+    }
+  }
+</style>

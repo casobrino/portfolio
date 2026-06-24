@@ -1,0 +1,92 @@
+:root {
+  color-scheme: light;
+
+  --color-bg: #fff;
+  --color-bg-subtle: #fdfdfd;
+  --color-bg-muted: #f5f5f5;
+  --color-bg-hover: #eee;
+  --color-text: #111;
+  --color-text-secondary: #666;
+  --color-text-tertiary: #555;
+  --color-text-muted: #777;
+  --color-text-heading: #222;
+  --color-text-label: #444;
+  --color-text-faint: #999;
+  --color-border: #eee;
+  --color-border-strong: #ddd;
+  --color-border-subtle: #f2f2f2;
+  --color-tag-bg: #eee;
+  --color-tag-text: #444;
+  --color-kbd-bg: #eee;
+  --color-tooltip-bg: #333;
+  --color-tooltip-text: #fff;
+  --color-tooltip-border: #111;
+  --color-tooltip-shadow: #222;
+  --color-accent: rgb(0, 188, 47);
+  --color-shadow: rgba(0, 0, 0, 0.08);
+  --color-dialog-backdrop: rgba(0, 0, 0, 0.75);
+  --color-icon: #777;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg: #0f0f0f;
+  --color-bg-subtle: #141414;
+  --color-bg-muted: #1a1a1a;
+  --color-bg-hover: #2a2a2a;
+  --color-text: #f0f0f0;
+  --color-text-secondary: #a0a0a0;
+  --color-text-tertiary: #888;
+  --color-text-muted: #999;
+  --color-text-heading: #e0e0e0;
+  --color-text-label: #ccc;
+  --color-text-faint: #777;
+  --color-border: #2a2a2a;
+  --color-border-strong: #3a3a3a;
+  --color-border-subtle: #222;
+  --color-tag-bg: #2a2a2a;
+  --color-tag-text: #ccc;
+  --color-kbd-bg: #2a2a2a;
+  --color-tooltip-bg: #e8e8e8;
+  --color-tooltip-text: #111;
+  --color-tooltip-border: #ccc;
+  --color-tooltip-shadow: #000;
+  --color-accent: rgb(0, 220, 60);
+  --color-shadow: rgba(0, 0, 0, 0.35);
+  --color-dialog-backdrop: rgba(0, 0, 0, 0.88);
+  --color-icon: #aaa;
+}
+
+[data-theme="dark"] hotkeypad-dialog,
+[data-theme="dark"] .hk-dialog {
+  --hk-bg: #1a1a1a;
+  --hk-text: #f0f0f0;
+  --hk-border: #2a2a2a;
+}
+
+[data-theme="dark"] #hotkeypad {
+  --hotkeypad-bg-kbd: #1f2937;
+  --hotkeypad-bg-backdrop: rgba(0, 0, 0, 0.6);
+  --hotkeypad-bg-container: #1f2937;
+  --hotkeypad-bg-item-hover: #161e2e;
+  --hotkeypad-border-container: #374151;
+  --hotkeypad-border-container-hover: #9ca3af;
+  --hotkeypad-fg-muted: #d1d5db;
+}
+
+.theme-toggle .icon-sun {
+  display: none;
+}
+
+.theme-toggle .icon-moon {
+  display: block;
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
+}
+
+[data-theme="dark"] .theme-toggle .icon-moon {
+  display: none;
+}

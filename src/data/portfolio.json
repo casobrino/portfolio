@@ -1,0 +1,35 @@
+[
+  {
+    "title": "Quiosco App",
+    "description": "Quiosco de restaurantes para pedir comida desde tu móvil sin contacto. Basado en la tecnología de multinacionales como McDonald's o Starbucks. Stack: React + Vite, Prisma ORM y base de datos relacional.",
+    "image": "/portfolio/quiosco.svg",
+    "tags": ["React", "Vite", "Prisma"],
+    "links": {
+      "github": "https://github.com/casobrino/quiosco-next"
+    },
+    "year": 2024,
+    "featured": true
+  },
+  {
+    "title": "Task Manager",
+    "description": "Gestor de tareas con autenticación y base de datos en tiempo real, habilitado para tareas con colaboradores. Mi versión de una aplicación tipo Trello.",
+    "image": "/portfolio/task-manager.svg",
+    "tags": ["React", "Firebase", "Realtime"],
+    "links": {
+      "github": "https://github.com/casobrino/taskManager"
+    },
+    "year": 2023,
+    "featured": false
+  },
+  {
+    "title": "Ecommerce .NET Core 9",
+    "description": "API para mantenerme actualizado en las nuevas versiones de paquetes NuGet. Mapster para mapeos personalizados, Identity para autenticación, Swagger para documentación y SQL Server como persistencia.",
+    "image": "/portfolio/ecommerce.svg",
+    "tags": [".NET", "C#", "SQL Server", "Swagger"],
+    "links": {
+      "github": "https://github.com/casobrino/console-task-manager"
+    },
+    "year": 2024,
+    "featured": true
+  }
+]

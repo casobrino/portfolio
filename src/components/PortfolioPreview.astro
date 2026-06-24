@@ -1,0 +1,44 @@
+---
+import PortfolioGrid from "@/components/PortfolioGrid.astro"
+import Section from "@/components/Section.astro"
+import portfolio from "@/data/portfolio.json"
+import { getPageTranslations, getRoutes } from "@/i18n/utils"
+import type { PortfolioProject } from "@/types"
+import { pages } from "@/i18n/ui"
+
+interface Props {
+  lang: keyof typeof pages
+}
+
+const { lang } = Astro.props
+const t = getPageTranslations(lang)
+const routes = getRoutes(lang)
+const projects = (portfolio as PortfolioProject[]).slice(0, 3)
+---
+
+<Section title={t.portfolio.title}>
+  <p class="subtitle">{t.portfolio.subtitle}</p>
+  <PortfolioGrid projects={projects} />
+  <a class="view-all" href={routes.portfolio}>
+    {t.portfolio.viewAll} →
+  </a>
+</Section>
+
+<style>
+  .subtitle {
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+  }
+
+  .view-all {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: var(--color-text);
+    font-family: system-ui, sans-serif;
+  }
+
+  .view-all:hover {
+    text-decoration: underline;
+  }
+</style>

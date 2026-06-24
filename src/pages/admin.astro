@@ -1,0 +1,20 @@
+---
+import AdminLayout from "@/layouts/AdminLayout.astro"
+import AdminPanel from "@/components/admin/AdminPanel.astro"
+import photos from "@/data/photos.json"
+import portfolio from "@/data/portfolio.json"
+import CV_ES from "@cv_es"
+import CV_EN from "@cv_en"
+import type { Photo, PortfolioProject } from "@/types"
+
+const initialData = {
+  photos: photos as Photo[],
+  portfolio: portfolio as PortfolioProject[],
+  cv_es: CV_ES,
+  cv_en: CV_EN,
+}
+---
+
+<AdminLayout title="Admin — César Sobrino">
+  <AdminPanel initialData={initialData} />
+</AdminLayout>

@@ -61,11 +61,11 @@ const title = Astro.props.title
 
   article h3 {
     font-weight: 500;
-    color: #111;
+    color: var(--color-text);
   }
 
   article a {
-    color: #111;
+    color: var(--color-text);
   }
 
   article a:hover {
@@ -73,7 +73,7 @@ const title = Astro.props.title
   }
 
   article h4 {
-    color: #222;
+    color: var(--color-text-heading);
     font-weight: 400;
   }
 
@@ -85,7 +85,7 @@ const title = Astro.props.title
   }
 
   time {
-    color: #555;
+    color: var(--color-text-tertiary);
     font-size: 0.85rem;
     min-width: 102px;
     cursor: default;
@@ -99,8 +99,8 @@ const title = Astro.props.title
 
   [data-title]:after {
     content: attr(data-title);
-    background-color: #333;
-    color: #fff;
+    background-color: var(--color-tooltip-bg);
+    color: var(--color-tooltip-text);
     font-size: 0.75rem;
     font-family:
       Menlo,
@@ -113,9 +113,9 @@ const title = Astro.props.title
     bottom: -1.4rem;
     left: 50%;
     white-space: nowrap;
-    box-shadow: 1px 1px 1px #222222;
+    box-shadow: 1px 1px 1px var(--color-tooltip-shadow);
     opacity: 0;
-    border: 1px solid #111111;
+    border: 1px solid var(--color-tooltip-border);
     z-index: 99999;
     visibility: hidden;
     border-radius: 6px;

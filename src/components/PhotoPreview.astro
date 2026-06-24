@@ -1,0 +1,107 @@
+---
+import Section from "@/components/Section.astro"
+import photos from "@/data/photos.json"
+import { getPageTranslations, getRoutes } from "@/i18n/utils"
+import type { Photo } from "@/types"
+import { pages } from "@/i18n/ui"
+
+interface Props {
+  lang: keyof typeof pages
+}
+
+const { lang } = Astro.props
+const t = getPageTranslations(lang)
+const routes = getRoutes(lang)
+const previewPhotos = (photos as Photo[]).slice(0, 3)
+---
+
+<Section title={t.photos.title}>
+  <p class="subtitle">{t.photos.subtitle}</p>
+  <ul class="preview-grid">
+    {
+      previewPhotos.map((photo) => (
+        <li>
+          <figure>
+            <img src={photo.src} alt={photo.alt} loading="lazy" width="400" height="300" />
+            <figcaption>
+              <span class="caption">{photo.caption}</span>
+              <span class="location">{photo.location}</span>
+            </figcaption>
+          </figure>
+        </li>
+      ))
+    }
+  </ul>
+  <a class="view-all" href={routes.photos} target="_blank" rel="noopener noreferrer">
+    {t.photos.viewAll} →
+  </a>
+</Section>
+
+<style>
+  .subtitle {
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+  }
+
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-inline: -16px;
+  }
+
+  figure {
+    margin: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--color-border-subtle);
+  }
+
+  img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+  }
+
+  figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px;
+  }
+
+  .caption {
+    font-size: 0.8rem;
+    color: var(--color-text);
+    font-family: system-ui, sans-serif;
+  }
+
+  .location {
+    font-size: 0.7rem;
+    color: var(--color-text-faint);
+  }
+
+  .view-all {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: var(--color-text);
+    font-family: system-ui, sans-serif;
+  }
+
+  .view-all:hover {
+    text-decoration: underline;
+  }
+
+  @media (width <= 700px) {
+    .preview-grid {
+      margin-inline: 0;
+    }
+
+    figure {
+      border: none;
+      box-shadow: 0 1px 1px var(--color-border-subtle);
+    }
+  }
+</style>
