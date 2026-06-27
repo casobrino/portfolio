@@ -5,7 +5,6 @@ import { getLangFromUrl, getPageTranslations, getRoutes } from "../../i18n/utils
 const lang = getLangFromUrl(Astro.url)
 
 import About from "@/components/sections/About.astro"
-import Hero from "@/components/sections/Hero.astro"
 import PortfolioPreview from "@/components/PortfolioPreview.astro"
 import PhotoPreview from "@/components/PhotoPreview.astro"
 import KeyboardManager from "@/components/KeyboardManager.astro"
@@ -17,9 +16,8 @@ const routes = getRoutes(lang)
 const AboutTitle = "About me"
 ---
 
-<Layout title={`${name} — ${label}`}>
+<Layout title={`${name} — ${label}`} header="cyberpunk">
   <main>
-    <Hero lang={lang} />
     <About title={AboutTitle} />
     <a class="cv-link" href={routes.cv}>
       {t.home.viewCv} →
@@ -33,9 +31,10 @@ const AboutTitle = "About me"
 
 <style>
   main {
-    padding: 4rem;
+    padding: 3rem 4rem 4rem;
     margin: auto;
     width: 100%;
+    max-width: 1200px;
   }
 
   .cv-link {

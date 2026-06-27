@@ -2,7 +2,6 @@
 import Layout from "@/layouts/Layout.astro"
 
 import About from "@/components/sections/About.astro"
-import Hero from "@/components/sections/Hero.astro"
 import PortfolioPreview from "@/components/PortfolioPreview.astro"
 import PhotoPreview from "@/components/PhotoPreview.astro"
 import KeyboardManager from "@/components/KeyboardManager.astro"
@@ -16,9 +15,8 @@ const t = getPageTranslations(lang)
 const routes = getRoutes(lang)
 ---
 
-<Layout title={`${name} — ${label}`}>
+<Layout title={`${name} — ${label}`} header="cyberpunk">
   <main>
-    <Hero lang={lang} />
     <About />
     <a class="cv-link" href={routes.cv}>
       {t.home.viewCv} →
@@ -32,9 +30,10 @@ const routes = getRoutes(lang)
 
 <style>
   main {
-    padding: 4rem;
+    padding: 3rem 4rem 4rem;
     margin: auto;
     width: 100%;
+    max-width: 1200px;
   }
 
   .cv-link {

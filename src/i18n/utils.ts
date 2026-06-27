@@ -24,6 +24,21 @@ export function getRoutes (lang: keyof typeof ui) {
   }
 }
 
+export function getAlternatePath (pathname: string, lang: keyof typeof ui) {
+  const normalized = pathname.replace(/\/$/, "") || "/"
+
+  if (lang === "en") {
+    if (normalized === "/en") return "/"
+    const spanishPath = normalized.replace(/^\/en/, "") || "/"
+    if (spanishPath === "/photos") return "/fotos"
+    return spanishPath
+  }
+
+  if (normalized === "/") return "/en/"
+  if (normalized === "/fotos") return "/en/photos"
+  return `/en${normalized}`
+}
+
 export function getPageTranslations (lang: keyof typeof pages) {
   return pages[lang]
 }

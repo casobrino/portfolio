@@ -1,13 +1,15 @@
 ---
 import PageNav from "@/components/PageNav.astro"
+import CyberpunkHero from "@/components/CyberpunkHero.astro"
 import { getLangFromUrl } from "@/i18n/utils"
 import { basics } from "@cv_es"
 
 interface Props {
   title: string
+  header?: "default" | "cyberpunk"
 }
 
-const { title } = Astro.props
+const { title, header = "default" } = Astro.props
 const lang = getLangFromUrl(Astro.url)
 
 const { image, summary, url } = basics
@@ -22,6 +24,18 @@ const { image, summary, url } = basics
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preload" as="image" href={image} />
+    {
+      header === "cyberpunk" && (
+        <>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap"
+            rel="stylesheet"
+          />
+        </>
+      )
+    }
 
     <meta property="og:url" content={url} />
     <meta property="og:type" content="website" />
@@ -49,8 +63,8 @@ const { image, summary, url } = basics
       })()
     </script>
   </head>
-  <body>
-    <PageNav />
+  <body class:list={[{ "home-cyberpunk": header === "cyberpunk" }]}>
+    {header === "cyberpunk" ? <CyberpunkHero /> : <PageNav />}
     <slot />
   </body>
 </html>

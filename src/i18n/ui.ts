@@ -22,6 +22,15 @@ export const pages = {
     },
     home: {
       viewCv: 'Ver mi CV completo',
+      headerCta: 'Ver CV',
+      hudModule: 'portfolio.module_highlight',
+      heroAria: 'Presentación principal',
+      heroTitle: 'La experiencia definitiva en desarrollo web',
+      heroPrimary: 'Ver CV',
+      heroSecondary: 'Ver portafolio',
+      heroHudStatus: 'profile.module_active',
+      contactEmail: 'Enviar correo a',
+      contactPhone: 'Llamar a',
     },
     portfolio: {
       title: 'Portafolio',
@@ -60,6 +69,15 @@ export const pages = {
     },
     home: {
       viewCv: 'View my full CV',
+      headerCta: 'View CV',
+      hudModule: 'portfolio.module_highlight',
+      heroAria: 'Main presentation',
+      heroTitle: 'The ultimate web development experience',
+      heroPrimary: 'View CV',
+      heroSecondary: 'View portfolio',
+      heroHudStatus: 'profile.module_active',
+      contactEmail: 'Send email to',
+      contactPhone: 'Call',
     },
     portfolio: {
       title: 'Portfolio',
