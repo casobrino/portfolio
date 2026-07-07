@@ -19,6 +19,8 @@ export function setStoredPassword(password: string) {
   sessionStorage.setItem(PASSWORD_KEY, password)
 }
 
+export type AdminUploadDestination = "photos" | "portfolio"
+
 export async function saveToServer(file: AdminFileKey, data: unknown, password: string) {
   const response = await fetch("/api/admin/save", {
     method: "POST",
@@ -35,6 +37,29 @@ export async function saveToServer(file: AdminFileKey, data: unknown, password: 
   }
 
   return result
+}
+
+export async function uploadAssetToServer(
+  file: File,
+  destination: AdminUploadDestination,
+  password: string
+) {
+  const response = await fetch("/api/admin/upload", {
+    method: "POST",
+    headers: {
+      "x-admin-password": password,
+      "x-filename": file.name,
+      "x-upload-destination": destination,
+    },
+    body: await file.arrayBuffer(),
+  })
+
+  const result = await response.json()
+  if (!response.ok) {
+    throw new Error(result.error ?? "No se pudo subir el archivo")
+  }
+
+  return result as { ok: true; path: string; filename: string }
 }
 
 export function downloadJson(filename: string, data: unknown) {
@@ -68,5 +93,7 @@ export function emptyProject(): PortfolioProject {
     links: {},
     year: new Date().getFullYear(),
     featured: false,
+    isOwn: true,
+    isPrivate: false,
   }
 }

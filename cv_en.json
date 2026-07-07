@@ -35,7 +35,9 @@
       "startDate": "2022-07-15",
       "endDate": null,
       "summary": "Development and maintenance of outdoor advertising management software, creation of new modules, and integration with external APIs. At Billboard Planet, the UX and UI vision I contribute is highly valued by the company.",
-      "highlights": [""]
+      "highlights": [
+        ""
+      ]
     },
     {
       "name": "Humanlab",
@@ -44,7 +46,9 @@
       "startDate": "2022-01-15",
       "endDate": "2022-12-20",
       "summary": "At Humanlab, we worked under contract with various companies and projects. During my time there, I worked with different technologies, mainly using React frameworks for the frontend and NestJS for the backend.",
-      "highlights": [""]
+      "highlights": [
+        ""
+      ]
     },
     {
       "name": "Freelance",
@@ -52,7 +56,9 @@
       "startDate": "2016-05-01",
       "endDate": "2019-05-01",
       "summary": "I was part of a group of freelancers working during university to cover personal expenses. Most of the projects were assigned by professors.",
-      "highlights": ["Started the company"]
+      "highlights": [
+        "Started the company"
+      ]
     }
   ],
   "education": [
@@ -76,7 +82,9 @@
       "startDate": "2022-08-01",
       "endDate": "2023-12-01",
       "score": "0.0",
-      "courses": ["English Language Level C2"]
+      "courses": [
+        "English Language Level C2"
+      ]
     }
   ],
   "awards": [
@@ -108,22 +116,37 @@
     {
       "name": "HTML",
       "level": "Master",
-      "keywords": ["Web Development", "Frontend"]
+      "keywords": [
+        "Web Development",
+        "Frontend"
+      ]
     },
     {
       "name": "Angular",
       "level": "Master",
-      "keywords": ["Web Development", "Frontend"]
+      "keywords": [
+        "Web Development",
+        "Frontend"
+      ]
     },
     {
       "name": "CSS",
       "level": "Master",
-      "keywords": ["Web Development", "Frontend", "Responsive Design"]
+      "keywords": [
+        "Web Development",
+        "Frontend",
+        "Responsive Design"
+      ]
     },
     {
       "name": "JavaScript",
       "level": "Master",
-      "keywords": ["Web Development", "Frontend", "Backend", "Fullstack"]
+      "keywords": [
+        "Web Development",
+        "Frontend",
+        "Backend",
+        "Fullstack"
+      ]
     },
     {
       "name": "Tailwind",
@@ -148,22 +171,41 @@
     {
       "name": "Node",
       "level": "Advanced",
-      "keywords": ["Web Development", "Backend", "JavaScript", "Server"]
+      "keywords": [
+        "Web Development",
+        "Backend",
+        "JavaScript",
+        "Server"
+      ]
     },
     {
       "name": "MySQL",
       "level": "Advanced",
-      "keywords": ["Databases", "SQL", "Data Storage", "Backend"]
+      "keywords": [
+        "Databases",
+        "SQL",
+        "Data Storage",
+        "Backend"
+      ]
     },
     {
       "name": "Git",
       "level": "Advanced",
-      "keywords": ["Version Control", "Collaboration", "Source Code"]
+      "keywords": [
+        "Version Control",
+        "Collaboration",
+        "Source Code"
+      ]
     },
     {
       "name": "GitHub",
       "level": "Advanced",
-      "keywords": ["Version Control", "Collaboration", "Source Code", "Git"]
+      "keywords": [
+        "Version Control",
+        "Collaboration",
+        "Source Code",
+        "Git"
+      ]
     },
     {
       "name": "Next.js",
@@ -179,17 +221,32 @@
     {
       "name": "React",
       "level": "Advanced",
-      "keywords": ["Web Development", "Frontend", "JavaScript Library", "UI"]
+      "keywords": [
+        "Web Development",
+        "Frontend",
+        "JavaScript Library",
+        "UI"
+      ]
     },
     {
       "name": "CSharp",
       "level": "Advanced",
-      "keywords": ["Web Development", "Backend", ".NET", "APIs"]
+      "keywords": [
+        "Web Development",
+        "Backend",
+        ".NET",
+        "APIs"
+      ]
     },
     {
       "name": "SQLServer",
       "level": "Advanced",
-      "keywords": ["Databases", "Backend", ".NET", "APIs"]
+      "keywords": [
+        "Databases",
+        "Backend",
+        ".NET",
+        "APIs"
+      ]
     }
   ],
   "languages": [
@@ -205,7 +262,9 @@
   "interests": [
     {
       "name": "Photography",
-      "keywords": ["Hobby"]
+      "keywords": [
+        "Hobby"
+      ]
     }
   ],
   "references": [],
@@ -214,23 +273,38 @@
       "name": "Quiosco App",
       "isActive": true,
       "description": "Restaurant kiosk app to order food contactlessly from your mobile device, inspired by technologies used by multinational companies such as McDonald's or Starbucks. The stack used for this project includes ReactVite connected to PrismaDB with PrismaORM. I continue to improve it privately, and it’s available for commercial sale.",
-      "highlights": ["Kiosk", "Restaurant"],
+      "highlights": [
+        "Kiosk",
+        "Restaurant"
+      ],
       "url": "https://github.com/casobrino/quiosco-next",
-      "github": "https://github.com/casobrino/quiosco-next"
+      "github": "https://github.com/casobrino/quiosco-next",
+      "isOwn": true,
+      "isPrivate": false
     },
     {
       "name": "Task Manager",
       "isActive": false,
       "description": "Task management application with authentication and real-time database, supporting collaborative task sharing. My own version inspired by Trello.",
-      "highlights": ["Manager", "Trello"],
-      "url": "https://github.com/casobrino/taskManager"
+      "highlights": [
+        "Manager",
+        "Trello"
+      ],
+      "url": "https://github.com/casobrino/taskManager",
+      "isOwn": true,
+      "isPrivate": false
     },
     {
       "name": "E-commerce .NET Core 9",
       "isActive": true,
       "description": "This is an API project mainly used to stay up-to-date with new versions of various NuGet packages. The project uses Mapster for custom mapping between DTOs, Identity for authentication, and Swagger for documentation. Data persistence is handled via SQL Server.",
-      "highlights": ["e-commerce", "API"],
-      "url": "https://github.com/casobrino/console-task-manager"
+      "highlights": [
+        "e-commerce",
+        "API"
+      ],
+      "url": "https://github.com/casobrino/console-task-manager",
+      "isOwn": true,
+      "isPrivate": false
     }
   ]
 }

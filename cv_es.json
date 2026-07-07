@@ -223,23 +223,29 @@
     {
       "name": "Quiosco App",
       "isActive": true,
+      "isOwn": true,
+      "isPrivate": false,
       "description": "Quiosco de restaurantes para pedir comida desde tu móvil sin contacto. Basado en la tecnología de multinacionales como McDonald's o Starbucks. El estack utilizado para éste proyecto fue ReactVite conectado a PrismaDB y el uso del PrismaORM. Actualmente sigo introduciendole mejoras en forma privada y abierto para su venta comercial.",
       "highlights": ["Quiosco", "Restaurant"],
       "url": "https://github.com/casobrino/quiosco-next",
       "github": "https://github.com/casobrino/quiosco-next"
     },
     {
-      "name": "Task Mannager.",
+      "name": "Task Manager",
       "isActive": false,
+      "isOwn": true,
+      "isPrivate": false,
       "description": "Gestor de tareas con autenticación y base de datos en tiempo real, habilitado para tareas con colaboradores, mi version de una aplicacion llamada Trello",
       "highlights": ["Manager", "Trello"],
       "url": "https://github.com/casobrino/taskManager"
     },
     {
-      "name": "Ecomerce .Net Core 9.",
+      "name": "Ecommerce .NET Core 9",
       "isActive": true,
+      "isOwn": true,
+      "isPrivate": false,
       "description": "Está es una api utilizada sobre todo para actualizarme en la integración de las nuevas versiones en los diferentes paquetes NuGets. En este proyecto se utilizó Mapster para mapeos peronalizados con diferentes DTO's, Authenticación con Identity package y documentación con Swagger. Para la persistencia de datos se hizo con SQLServer.",
-      "highlights": ["ecomerce", "api"],
+      "highlights": ["ecommerce", "api"],
       "url": "https://github.com/casobrino/console-task-manager"
     }
   ]

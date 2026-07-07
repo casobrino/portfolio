@@ -39,6 +39,9 @@ export const pages = {
       viewCode: 'Ver código',
       featured: 'Destacado',
       viewAll: 'Ver todos los proyectos',
+      ownProject: 'Propio',
+      clientProject: 'Cliente',
+      active: 'En desarrollo',
     },
     photos: {
       title: 'Fotografía',
@@ -86,6 +89,9 @@ export const pages = {
       viewCode: 'View code',
       featured: 'Featured',
       viewAll: 'View all projects',
+      ownProject: 'Own',
+      clientProject: 'Client',
+      active: 'In development',
     },
     photos: {
       title: 'Photography',

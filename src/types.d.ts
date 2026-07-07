@@ -11,6 +11,8 @@ export interface PortfolioProject {
   }
   year: number
   featured: boolean
+  isOwn?: boolean
+  isPrivate?: boolean
 }
 
 export interface Photo {

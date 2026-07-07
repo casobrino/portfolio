@@ -129,11 +129,15 @@ const printInfo = [email, phone, linkedUrl].filter(Boolean).join(" • ")
       </p>
 
       <div class="cp-hero__actions">
-        <a class="cp-cta cp-cta--primary" href={routes.cv}>
-          {t.home.heroPrimary}
+        <a class="cybr-btn" href={routes.cv}>
+          {t.nav.cv}<span aria-hidden="true">_</span>
+          <span aria-hidden="true" class="cybr-btn__glitch">{t.nav.cv}_</span>
+          <span aria-hidden="true" class="cybr-btn__tag">R25</span>
         </a>
-        <a class="cp-cta cp-cta--secondary" href={routes.portfolio}>
-          {t.home.heroSecondary}
+        <a class="cybr-btn" href={routes.portfolio}>
+          {t.nav.portfolio}<span aria-hidden="true">_</span>
+          <span aria-hidden="true" class="cybr-btn__glitch">{t.nav.portfolio}_</span>
+          <span aria-hidden="true" class="cybr-btn__tag">R25</span>
         </a>
       </div>
 
@@ -676,37 +680,211 @@ const printInfo = [email, phone, linkedUrl].filter(Boolean).join(" • ")
 
   .cp-hero__actions {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
     gap: 0.75rem;
     margin-top: 0.5rem;
   }
 
-  .cp-cta--primary {
-    color: var(--cp-black);
-    background: var(--cp-yellow);
-    border: 2px solid var(--cp-black);
-    padding: calc(0.85rem - 2px) 1.5rem;
-    font-size: 0.85rem;
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+  .cp-hero__actions .cybr-btn {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    flex: 0 1 auto;
+    --font-size: 17px;
+    --border: 3px;
+    --label-size: 7px;
+    min-width: 140px;
+    height: 52px;
+    line-height: 52px;
+    letter-spacing: 1px;
+    padding: 0 0.5rem;
   }
 
-  .cp-cta--primary:hover {
-    filter: brightness(1.15);
-    transform: translateY(-2px);
+  @font-face {
+    font-family: Cyber;
+    src: url("https://assets.codepen.io/605876/Blender-Pro-Bold.otf");
+    font-display: swap;
   }
 
-  .cp-cta--secondary {
-    color: var(--cp-black);
+  .cybr-btn {
+    --primary: hsl(var(--primary-hue), 85%, calc(var(--primary-lightness, 50) * 1%));
+    --shadow-primary: hsl(var(--shadow-primary-hue), 90%, 50%);
+    --primary-hue: 0;
+    --primary-lightness: 50;
+    --color: hsl(0, 0%, 100%);
+    --font-size: 17px;
+    --shadow-primary-hue: 180;
+    --label-size: 7px;
+    --shadow-secondary-hue: 60;
+    --shadow-secondary: hsl(var(--shadow-secondary-hue), 90%, 60%);
+    --clip: polygon(0 0, 100% 0, 100% 100%, 95% 100%, 95% 90%, 85% 90%, 85% 100%, 8% 100%, 0 70%);
+    --border: 3px;
+    --shimmy-distance: 5;
+    --clip-one: polygon(0 2%, 100% 2%, 100% 95%, 95% 95%, 95% 90%, 85% 90%, 85% 95%, 8% 95%, 0 70%);
+    --clip-two: polygon(0 78%, 100% 78%, 100% 100%, 95% 100%, 95% 90%, 85% 90%, 85% 100%, 8% 100%, 0 78%);
+    --clip-three: polygon(0 44%, 100% 44%, 100% 54%, 95% 54%, 95% 54%, 85% 54%, 85% 54%, 8% 54%, 0 54%);
+    --clip-four: polygon(0 0, 100% 0, 100% 0, 95% 0, 95% 0, 85% 0, 85% 0, 8% 0, 0 0);
+    --clip-five: polygon(0 0, 100% 0, 100% 0, 95% 0, 95% 0, 85% 0, 85% 0, 8% 0, 0 0);
+    --clip-six: polygon(0 40%, 100% 40%, 100% 85%, 95% 85%, 95% 85%, 85% 85%, 85% 85%, 8% 85%, 0 70%);
+    --clip-seven: polygon(0 63%, 100% 63%, 100% 80%, 95% 80%, 95% 80%, 85% 80%, 85% 80%, 8% 80%, 0 70%);
+    font-family: "Cyber", sans-serif;
+    color: var(--color);
+    cursor: pointer;
     background: transparent;
-    border: 2px solid var(--cp-black);
-    padding: calc(0.85rem - 2px) 1.5rem;
-    font-size: 0.85rem;
-    clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+    text-transform: uppercase;
+    font-size: var(--font-size);
+    outline: transparent;
+    letter-spacing: 1px;
+    position: relative;
+    font-weight: 700;
+    border: 0;
+    min-width: 140px;
+    height: 52px;
+    line-height: 52px;
+    transition: background 0.2s;
   }
 
-  .cp-cta--secondary:hover {
-    background: rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
+  .cybr-btn:hover {
+    --primary: hsl(var(--primary-hue), 85%, calc(var(--primary-lightness, 50) * 0.8%));
+  }
+
+  .cybr-btn:active {
+    --primary: hsl(var(--primary-hue), 85%, calc(var(--primary-lightness, 50) * 0.6%));
+  }
+
+  .cybr-btn::after,
+  .cybr-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    clip-path: var(--clip);
+    z-index: -1;
+  }
+
+  .cybr-btn::before {
+    background: var(--shadow-primary);
+    transform: translate(var(--border), 0);
+  }
+
+  .cybr-btn::after {
+    background: var(--primary);
+  }
+
+  .cybr-btn__tag {
+    position: absolute;
+    padding: 1px 4px;
+    letter-spacing: 1px;
+    line-height: 1;
+    bottom: -5%;
+    right: 5%;
+    font-weight: normal;
+    color: hsl(0, 0%, 0%);
+    font-size: var(--label-size);
+  }
+
+  .cybr-btn__glitch {
+    position: absolute;
+    top: calc(var(--border) * -1);
+    left: calc(var(--border) * -1);
+    right: calc(var(--border) * -1);
+    bottom: calc(var(--border) * -1);
+    background: var(--shadow-primary);
+    text-shadow: 2px 2px var(--shadow-primary), -2px -2px var(--shadow-secondary);
+    clip-path: var(--clip);
+    animation: glitch 2s infinite;
+    display: none;
+  }
+
+  .cybr-btn:hover .cybr-btn__glitch {
+    display: block;
+  }
+
+  .cybr-btn__glitch::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--border) * 1);
+    right: calc(var(--border) * 1);
+    bottom: calc(var(--border) * 1);
+    left: calc(var(--border) * 1);
+    clip-path: var(--clip);
+    background: var(--primary);
+    z-index: -1;
+  }
+
+  @keyframes glitch {
+    0% {
+      clip-path: var(--clip-one);
+    }
+    2%,
+    8% {
+      clip-path: var(--clip-two);
+      transform: translate(calc(var(--shimmy-distance) * -1%), 0);
+    }
+    6% {
+      clip-path: var(--clip-two);
+      transform: translate(calc(var(--shimmy-distance) * 1%), 0);
+    }
+    9% {
+      clip-path: var(--clip-two);
+      transform: translate(0, 0);
+    }
+    10% {
+      clip-path: var(--clip-three);
+      transform: translate(calc(var(--shimmy-distance) * 1%), 0);
+    }
+    13% {
+      clip-path: var(--clip-three);
+      transform: translate(0, 0);
+    }
+    14%,
+    21% {
+      clip-path: var(--clip-four);
+      transform: translate(calc(var(--shimmy-distance) * 1%), 0);
+    }
+    25% {
+      clip-path: var(--clip-five);
+      transform: translate(calc(var(--shimmy-distance) * 1%), 0);
+    }
+    30% {
+      clip-path: var(--clip-five);
+      transform: translate(calc(var(--shimmy-distance) * -1%), 0);
+    }
+    35%,
+    45% {
+      clip-path: var(--clip-six);
+      transform: translate(calc(var(--shimmy-distance) * -1%));
+    }
+    40% {
+      clip-path: var(--clip-six);
+      transform: translate(calc(var(--shimmy-distance) * 1%));
+    }
+    50% {
+      clip-path: var(--clip-six);
+      transform: translate(0, 0);
+    }
+    55% {
+      clip-path: var(--clip-seven);
+      transform: translate(calc(var(--shimmy-distance) * 1%), 0);
+    }
+    60% {
+      clip-path: var(--clip-seven);
+      transform: translate(0, 0);
+    }
+    31%,
+    61%,
+    100% {
+      clip-path: var(--clip-four);
+    }
+  }
+
+  .cp-hero__actions .cybr-btn:nth-of-type(2) {
+    --primary-hue: 260;
+    min-width: 168px;
   }
 
   .cp-hero__social {
@@ -935,13 +1113,26 @@ const printInfo = [email, phone, linkedUrl].filter(Boolean).join(" • ")
     }
 
     .cp-hero__actions {
-      flex-direction: column;
-      width: 100%;
+      justify-content: center;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
-    .cp-cta--primary,
-    .cp-cta--secondary {
-      width: 100%;
+    .cp-hero__actions .cybr-btn {
+      min-width: 0;
+      width: auto;
+      padding: 0 0.65rem;
+      font-size: 13px;
+      height: 42px;
+      line-height: 42px;
+      --font-size: 13px;
+      --border: 2px;
+      --label-size: 6px;
+    }
+
+    .cp-hero__actions .cybr-btn:nth-of-type(2) {
+      min-width: 0;
     }
 
     .cp-hero__footer-hud {

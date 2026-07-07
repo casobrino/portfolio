@@ -20,7 +20,7 @@ const t = getPageTranslations(lang)
         data-index={index}
         aria-label={photo.alt}
       >
-        <img src={photo.src} alt={photo.alt} loading="lazy" width="400" height="300" />
+        <img src={photo.src} alt={photo.alt} loading="lazy" />
         <span class="photo-meta">
           <span class="caption">{photo.caption}</span>
           <span class="location">{photo.location}</span>
@@ -91,13 +91,16 @@ const t = getPageTranslations(lang)
 
 <style>
   .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1rem;
+    column-count: 3;
+    column-gap: 1rem;
     margin-inline: -16px;
   }
 
   .photo-trigger {
+    display: block;
+    width: 100%;
+    margin-bottom: 1rem;
+    break-inside: avoid;
     border: none;
     padding: 0;
     background: none;
@@ -116,8 +119,7 @@ const t = getPageTranslations(lang)
 
   .photo-trigger img {
     width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
+    height: auto;
     display: block;
   }
 
@@ -197,6 +199,7 @@ const t = getPageTranslations(lang)
 
   @media (width <= 700px) {
     .gallery {
+      column-count: 2;
       margin-inline: 0;
     }
 

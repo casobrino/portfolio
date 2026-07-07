@@ -55,6 +55,7 @@ const { initialData } = Astro.props
     getStoredPassword,
     saveToServer,
     setStoredPassword,
+    uploadAssetToServer,
   } from "@/scripts/admin-panel"
   import type { PortfolioProject } from "@/types"
 
@@ -125,7 +126,7 @@ const { initialData } = Astro.props
           <button type="button" class="btn" id="export-photos">Exportar JSON</button>
         </div>
       </div>
-      <p class="hint">Coloca las imágenes en <code>public/photos/</code> y referencia la ruta en <code>src</code>.</p>
+      <p class="hint">Sube una imagen con el botón de cada tarjeta o colócala manualmente en <code>public/photos/</code>. Luego pulsa <strong>Guardar</strong> para actualizar <code>photos.json</code>.</p>
       <div class="cards">
         ${
           data.photos.length === 0
@@ -144,6 +145,18 @@ const { initialData } = Astro.props
                   <button type="button" class="btn danger btn-sm delete-photo" data-index="${index}">Eliminar</button>
                 </div>
                 ${field("Ruta de imagen", `photo-src-${index}`, photo.src, "text", "/photos/mi-foto.jpg")}
+                <div class="upload-row">
+                  <label class="btn file-btn">
+                    Subir imagen
+                    <input
+                      type="file"
+                      class="photo-upload"
+                      data-index="${index}"
+                      accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
+                      hidden
+                    />
+                  </label>
+                </div>
                 <div class="field-row">
                   ${field("Texto alternativo", `photo-alt-${index}`, photo.alt)}
                   ${field("Fecha (YYYY-MM)", `photo-date-${index}`, photo.date)}
@@ -176,6 +189,38 @@ const { initialData } = Astro.props
         const index = Number(button.getAttribute("data-index"))
         data.photos.splice(index, 1)
         renderPhotos()
+      })
+    })
+
+    content.querySelectorAll(".photo-upload").forEach((input) => {
+      input.addEventListener("change", async (event) => {
+        const file = (event.target as HTMLInputElement).files?.[0]
+        if (!file) return
+
+        const index = Number(input.getAttribute("data-index"))
+        setStoredPassword(passwordInput.value)
+
+        try {
+          showStatus(`Subiendo ${file.name}...`, "info")
+          const result = await uploadAssetToServer(file, "photos", passwordInput.value)
+          const srcInput = document.getElementById(`photo-src-${index}`) as HTMLInputElement
+          if (srcInput) srcInput.value = result.path
+
+          const altInput = document.getElementById(`photo-alt-${index}`) as HTMLInputElement
+          if (altInput && !altInput.value.trim()) {
+            altInput.value = file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ")
+          }
+
+          const preview = input.closest(".card-layout")?.querySelector(".card-preview img") as HTMLImageElement
+          if (preview) preview.src = result.path
+
+          showStatus(`Imagen guardada en ${result.path}`, "success")
+        } catch (error) {
+          const message = error instanceof Error ? error.message : "Error al subir"
+          showStatus(message, "error")
+        } finally {
+          ;(event.target as HTMLInputElement).value = ""
+        }
       })
     })
   }
@@ -229,6 +274,10 @@ const { initialData } = Astro.props
                   ${field("Link demo", `project-live-${index}`, project.links.live ?? "")}
                   ${field("GitHub", `project-github-${index}`, project.links.github ?? "")}
                 </div>
+                <div class="field-row">
+                  ${checkboxField("Proyecto propio", `project-is-own-${index}`, project.isOwn !== false)}
+                  ${checkboxField("Privado (oculta URL)", `project-is-private-${index}`, project.isPrivate === true)}
+                </div>
                 ${checkboxField("Destacado", `project-featured-${index}`, project.featured)}
               </div>
             </div>
@@ -277,6 +326,8 @@ const { initialData } = Astro.props
         tags,
         year: Number(getInputValue(`project-year-${index}`)),
         featured: getCheckboxValue(`project-featured-${index}`),
+        isOwn: getCheckboxValue(`project-is-own-${index}`),
+        isPrivate: getCheckboxValue(`project-is-private-${index}`),
         links: {
           ...(live ? { live } : {}),
           ...(github ? { github } : {}),
@@ -667,6 +718,12 @@ const { initialData } = Astro.props
     display: inline-flex;
     align-items: center;
     cursor: pointer;
+  }
+
+  #admin-root .upload-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
   }
 
   #admin-root .cards {
