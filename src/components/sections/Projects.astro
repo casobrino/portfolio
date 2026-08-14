@@ -14,19 +14,23 @@ const title = Astro.props.title
   <ul>
     {
       projects.map(
-        ({ url, description, highlights, name, isActive, github }) => {
+        ({ url, description, highlights, name, isActive, github }: { url?: string, description: string, highlights: string[], name: string, isActive: boolean, github?: string }) => {
           return (
             <li>
               <article>
                 <header>
                   <h3>
-                    <a
-                      href={url}
-                      target="_blank"
-                      title={`Ver el proyecto ${name}`}
-                    >
-                      {name}
-                    </a>
+                    {url ? (
+                      <a
+                        href={url}
+                        target="_blank"
+                        title={`Ver el proyecto ${name}`}
+                      >
+                        {name}
+                      </a>
+                    ) : (
+                      <span>{name}</span>
+                    )}
                     {isActive && <span>•</span>}
                     {github && (
                       <a

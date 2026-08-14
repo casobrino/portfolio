@@ -13,7 +13,7 @@ interface Props {
 const { lang } = Astro.props
 const t = getPageTranslations(lang)
 const routes = getRoutes(lang)
-const projects = (portfolio as PortfolioProject[]).slice(0, 3)
+const projects = (portfolio as PortfolioProject[]).slice(0, 4)
 ---
 
 <Section title={t.portfolio.title}>

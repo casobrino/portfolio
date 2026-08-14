@@ -34,7 +34,7 @@
       "url": "https://online.billboardplanet.com/",
       "startDate": "2022-07-15",
       "endDate": null,
-      "summary": "Creación y mantenimiento de software de gestion de publicidad fuera de casa, creación de nuevos modulos e integración con API externas. En Billboard Planet la visión que aporto en UX y UI es de gran valor para la empresa.",
+      "summary": "Desarrollo Full Stack con Angular, SQL Server y .NET Core como stack principal. Según los microservicios de la empresa, también trabajo con nuevas tecnologías. He participado en proyectos de inventarios, importaciones masivas de datos e integraciones con múltiples APIs, incluyendo Salesforce y APIs internas, aplicando siempre estándares de calidad para un código limpio y mantenible.",
       "highlights": [""]
     },
     {
@@ -105,6 +105,11 @@
     }
   ],
   "skills": [
+    {
+      "name": "Rust",
+      "level": "medium",
+      "keywords": ["Desktop", "Rust"]
+    },
     {
       "name": "HTML",
       "level": "Master",
@@ -200,6 +205,11 @@
       "name": "SqlServer",
       "level": "Avanzado",
       "keywords": ["Bases de Datos", "Backend", ".NET", "APIs"]
+    },
+    {
+      "name": "SocketIO",
+      "level": "Avanzado",
+      "keywords": ["Desarrollo Web", "Backend", "JavaScript", "Servidor"]
     }
   ],
   "languages": [
@@ -221,12 +231,33 @@
   "references": [],
   "projects": [
     {
-      "name": "Quiosco App",
+      "name": "Glupit",
       "isActive": true,
-      "description": "Quiosco de restaurantes para pedir comida desde tu móvil sin contacto. Basado en la tecnología de multinacionales como McDonald's o Starbucks. El estack utilizado para éste proyecto fue ReactVite conectado a PrismaDB y el uso del PrismaORM. Actualmente sigo introduciendole mejoras en forma privada y abierto para su venta comercial.",
-      "highlights": ["Quiosco", "Restaurant"],
-      "url": "https://github.com/casobrino/quiosco-next",
-      "github": "https://github.com/casobrino/quiosco-next"
+      "description": "Plataforma SaaS para restaurantes: pedidos por QR, gestión de mesas, menú digital, cocina en tiempo real y analytics desde un solo dashboard. Multi-sucursal y lista para operar en minutos.",
+      "highlights": ["SaaS", "Restaurantes", "QR"],
+      "url": "https://glupit.com"
+    },
+    {
+      "name": "Igendar",
+      "isActive": true,
+      "description": "Calendar Manager para negocios de servicios: agenda, reservas en línea, depósitos, equipo y perfil público compartible. El cliente reserva solo; tú gestionas citas y cobros en un solo panel.",
+      "highlights": ["SaaS", "Reservas", "Agenda"],
+      "url": "https://igendar.com"
+    },
+    {
+      "name": "Water-Them",
+      "isActive": true,
+      "description": "Iniciativa ambiental para combatir el calentamiento global plantando y regando árboles de forma colaborativa. Comparte ubicaciones para que cualquiera pueda ayudar a cuidar las plantas a su alrededor.",
+      "highlights": ["Sustentabilidad", "Comunidad", "Árboles"],
+      "url": "https://water-them.com"
+    },
+    {
+      "name": "Instagram Photo Splitter",
+      "isActive": true,
+      "description": "Aplicación de escritorio en Rust (egui) para preparar fotos de Instagram: divide panorámicas en varias publicaciones, crea marcos estilo Polaroid y arma collages cinematográficos, todo en los tamaños máximos del feed.",
+      "highlights": ["Rust", "Desktop", "Instagram"],
+      "url": "https://github.com/casobrino/instagram-splitter",
+      "github": "https://github.com/casobrino/instagram-splitter"
     },
     {
       "name": "Task Mannager.",
@@ -237,7 +268,7 @@
     },
     {
       "name": "Ecomerce .Net Core 9.",
-      "isActive": true,
+      "isActive": false,
       "description": "Está es una api utilizada sobre todo para actualizarme en la integración de las nuevas versiones en los diferentes paquetes NuGets. En este proyecto se utilizó Mapster para mapeos peronalizados con diferentes DTO's, Authenticación con Identity package y documentación con Swagger. Para la persistencia de datos se hizo con SQLServer.",
       "highlights": ["ecomerce", "api"],
       "url": "https://github.com/casobrino/console-task-manager"

@@ -1,19 +1,52 @@
 [
   {
-    "title": "Quiosco App",
-    "description": "Quiosco de restaurantes para pedir comida desde tu móvil sin contacto. Basado en la tecnología de multinacionales como McDonald's o Starbucks. Stack: React + Vite, Prisma ORM y base de datos relacional.",
-    "image": "/portfolio/quiosco.svg",
-    "tags": ["React", "Vite", "Prisma"],
+    "title": "Glupit",
+    "description": "Plataforma SaaS para restaurantes: pedidos por QR, gestión de mesas, menú digital, cocina en tiempo real y analytics desde un solo dashboard. Multi-sucursal, sin comisiones por pedido.",
+    "image": "/portfolio/glupit.webp",
+    "tags": ["SaaS", "Realtime", "QR", "Dashboard"],
     "links": {
-      "github": "https://github.com/casobrino/quiosco-next"
+      "live": "https://glupit.com"
+    },
+    "year": 2025,
+    "featured": true
+  },
+  {
+    "title": "Igendar",
+    "description": "Calendar Manager para negocios de servicios: agenda, reservas en línea, depósitos, equipo y perfil público compartible. El cliente reserva solo; tú gestionas citas y cobros en un solo panel.",
+    "image": "/portfolio/igendar.webp",
+    "tags": ["SaaS", "Reservas", "Agenda", "Pagos"],
+    "links": {
+      "live": "https://igendar.com"
+    },
+    "year": 2025,
+    "featured": true
+  },
+  {
+    "title": "Water-Them",
+    "description": "Iniciativa ambiental para combatir el calentamiento global plantando y regando árboles de forma colaborativa. Comparte ubicaciones para que cualquiera pueda ayudar a cuidar las plantas a su alrededor — especialmente en zonas calurosas como la Península de Yucatán.",
+    "image": "/portfolio/water-them.jpg",
+    "tags": ["Sustentabilidad", "Comunidad", "Medio ambiente"],
+    "links": {
+      "live": "https://water-them.com"
     },
     "year": 2024,
     "featured": true
   },
   {
+    "title": "Instagram Photo Splitter",
+    "description": "Aplicación de escritorio en Rust (egui) para preparar fotos de Instagram: divide panorámicas en varias publicaciones, crea marcos estilo Polaroid y arma collages cinematográficos, todo en los tamaños máximos del feed.",
+    "image": "/portfolio/instagram-spliter.webp",
+    "tags": ["Rust", "egui", "Desktop", "Instagram"],
+    "links": {
+      "github": "https://github.com/casobrino/instagram-splitter"
+    },
+    "year": 2025,
+    "featured": true
+  },
+  {
     "title": "Task Manager",
     "description": "Gestor de tareas con autenticación y base de datos en tiempo real, habilitado para tareas con colaboradores. Mi versión de una aplicación tipo Trello.",
-    "image": "/portfolio/task-manager.svg",
+    "image": "/portfolio/task-manager.webp",
     "tags": ["React", "Firebase", "Realtime"],
     "links": {
       "github": "https://github.com/casobrino/taskManager"

@@ -34,7 +34,7 @@
       "url": "https://online.billboardplanet.com/",
       "startDate": "2022-07-15",
       "endDate": null,
-      "summary": "Development and maintenance of outdoor advertising management software, creation of new modules, and integration with external APIs. At Billboard Planet, the UX and UI vision I contribute is highly valued by the company.",
+      "summary": "Full Stack development using Angular, SQL Server, and .NET Core as my main stack. Depending on the company's microservices, I also work with new technologies when needed. I have worked on inventory projects, bulk data imports, and integrations with multiple APIs, including Salesforce and internal APIs, always following quality standards to keep the code clean and maintainable.",
       "highlights": [""]
     },
     {
@@ -105,6 +105,11 @@
     }
   ],
   "skills": [
+    {
+      "name": "Rust",
+      "level": "medium",
+      "keywords": ["Desktop", "Rust"]
+    },
     {
       "name": "HTML",
       "level": "Master",
@@ -190,6 +195,11 @@
       "name": "SQLServer",
       "level": "Advanced",
       "keywords": ["Databases", "Backend", ".NET", "APIs"]
+    },
+    {
+      "name": "Socket.IO",
+      "level": "Advanced",
+      "keywords": ["Web Development", "Backend", "JavaScript", "Server"]
     }
   ],
   "languages": [
@@ -211,12 +221,33 @@
   "references": [],
   "projects": [
     {
-      "name": "Quiosco App",
+      "name": "Glupit",
       "isActive": true,
-      "description": "Restaurant kiosk app to order food contactlessly from your mobile device, inspired by technologies used by multinational companies such as McDonald's or Starbucks. The stack used for this project includes ReactVite connected to PrismaDB with PrismaORM. I continue to improve it privately, and it’s available for commercial sale.",
-      "highlights": ["Kiosk", "Restaurant"],
-      "url": "https://github.com/casobrino/quiosco-next",
-      "github": "https://github.com/casobrino/quiosco-next"
+      "description": "SaaS platform for restaurants: QR ordering, table management, digital menus, real-time kitchen updates, and analytics in a single dashboard. Multi-location ready and live in minutes.",
+      "highlights": ["SaaS", "Restaurants", "QR"],
+      "url": "https://glupit.com"
+    },
+    {
+      "name": "Igendar",
+      "isActive": true,
+      "description": "Calendar Manager for service businesses: scheduling, online bookings, deposits, team management, and a shareable public profile. Clients book on their own; you manage appointments and payments in one place.",
+      "highlights": ["SaaS", "Bookings", "Calendar"],
+      "url": "https://igendar.com"
+    },
+    {
+      "name": "Water-Them",
+      "isActive": true,
+      "description": "Environmental initiative to fight global warming by planting and watering trees collaboratively. Share tree locations so anyone nearby can help care for them.",
+      "highlights": ["Sustainability", "Community", "Trees"],
+      "url": "https://water-them.com"
+    },
+    {
+      "name": "Instagram Photo Splitter",
+      "isActive": true,
+      "description": "Desktop app built in Rust with egui to prepare photos for Instagram: split panoramas into multiple posts, create Polaroid-style frames, and build cinematic strip collages — all at Instagram feed max sizes.",
+      "highlights": ["Rust", "Desktop", "Instagram"],
+      "url": "https://github.com/casobrino/instagram-splitter",
+      "github": "https://github.com/casobrino/instagram-splitter"
     },
     {
       "name": "Task Manager",
@@ -227,7 +258,7 @@
     },
     {
       "name": "E-commerce .NET Core 9",
-      "isActive": true,
+      "isActive": false,
       "description": "This is an API project mainly used to stay up-to-date with new versions of various NuGet packages. The project uses Mapster for custom mapping between DTOs, Identity for authentication, and Swagger for documentation. Data persistence is handled via SQL Server.",
       "highlights": ["e-commerce", "API"],
       "url": "https://github.com/casobrino/console-task-manager"
