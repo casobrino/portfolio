@@ -1,5 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist", "src/plugins"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
@@ -7,6 +9,5 @@
       "@cv_en": ["./cv_en.json"],
       "@/*": ["src/*"]
     }
-  },
-  "exclude": ["src/plugins"]
+  }
 }

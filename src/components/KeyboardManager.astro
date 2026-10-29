@@ -167,7 +167,7 @@ const profilesInfo = profiles.map(({ network, url }) => {
       hotkey,
       section,
       handler: () => {
-        window.open(url, "_blank")
+        window.open(url, "_blank", "noopener,noreferrer")
       },
     }
   })

@@ -2,10 +2,11 @@
 import ThemeToggle from "@/components/ThemeToggle.astro"
 import { getLangFromUrl, getPageTranslations, getRoutes } from "@/i18n/utils"
 
-const lang = getLangFromUrl(Astro.url)
+const currentUrl = Astro.url
+const lang = getLangFromUrl(currentUrl)
 const t = getPageTranslations(lang)
 const routes = getRoutes(lang)
-const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/"
+const currentPath = currentUrl.pathname.replace(/\/$/, "") || "/"
 
 const links = [
   {
