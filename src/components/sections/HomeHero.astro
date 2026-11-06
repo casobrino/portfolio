@@ -10,6 +10,12 @@ import WorldMap from '@/icons/WorldMap.astro'
 import type { SocialIcon } from '@/types'
 import AsciiPond from '@/components/AsciiPond.astro'
 
+interface Props {
+  cvHref: string
+  cvLabel: string
+}
+
+const { cvHref, cvLabel } = Astro.props
 const { name, label, image, location, profiles, phone, email } = basics
 const { city, region } = location
 
@@ -22,32 +28,32 @@ const SOCIAL_ICONS: SocialIcon = {
 const linkedInfo = profiles.find(({ network }) => network === 'LinkedIn')
 const linkedUrl = linkedInfo?.url
 
-const printInfo = [email, phone, linkedUrl].filter(Boolean).join(' • ');
+const printInfo = [email, phone, linkedUrl].filter(Boolean).join(' • ')
 ---
 
-<div class="hero">
+<div class='hero'>
   <AsciiPond />
-  <div class="hero-content">
+  <div class='hero-content'>
     <Section>
-      <div class="container" data-koi-avoid>
-        <div class="info">
+      <div class='container' data-koi-avoid>
+        <div class='info'>
           <h1>{name}</h1>
           <h2>{label}</h2>
           <span>
             <WorldMap />
             {city}, {region}
           </span>
-          <footer class="print">
+          <footer class='print'>
             {printInfo}
           </footer>
-          <footer class="no-print">
+          <footer class='no-print'>
             {
               email && (
                 <a
                   href={`mailto:${email}`}
                   title={`Enviar un correo electrónico a ${name} al correo ${email}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target='_blank'
+                  rel='noopener noreferrer'
                 >
                   <Mail />
                 </a>
@@ -58,8 +64,8 @@ const printInfo = [email, phone, linkedUrl].filter(Boolean).join(' • ');
                 <a
                   href={`tel:${phone}`}
                   title={`Llamar por teléfono a ${name} al número ${phone}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target='_blank'
+                  rel='noopener noreferrer'
                 >
                   <Phone />
                 </a>
@@ -73,8 +79,8 @@ const printInfo = [email, phone, linkedUrl].filter(Boolean).join(' • ');
                   <a
                     href={url}
                     title={`Visitar el perfil de ${name} en ${network}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    target='_blank'
+                    rel='noopener noreferrer'
                   >
                     <Icon />
                   </a>
@@ -89,6 +95,9 @@ const printInfo = [email, phone, linkedUrl].filter(Boolean).join(' • ');
       </div>
     </Section>
   </div>
+  <a class='cv-link' href={cvHref}>
+    {cvLabel} →
+  </a>
 </div>
 
 <style>
@@ -96,8 +105,11 @@ const printInfo = [email, phone, linkedUrl].filter(Boolean).join(' • ');
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    margin-bottom: 48px;
-    height: 90vh;
+    /* Viewport minus page nav (~padding + links + margin) so the CV link stays on screen */
+    height: calc(100dvh - 5.5rem);
+    min-height: 28rem;
+    display: flex;
+    flex-direction: column;
   }
 
   .hero :global(section) {
@@ -105,12 +117,30 @@ const printInfo = [email, phone, linkedUrl].filter(Boolean).join(' • ');
   }
 
   .hero-content {
-    height: 80%;
+    position: relative;
+    z-index: 1;
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    min-height: 0;
+  }
+
+  .cv-link {
     position: relative;
     z-index: 1;
+    display: block;
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 0 1.5rem;
+    font-size: 0.85rem;
+    color: var(--color-text);
+    font-family: system-ui, sans-serif;
+  }
+
+  .cv-link:hover {
+    text-decoration: underline;
   }
 
   .container {
@@ -183,7 +213,12 @@ const printInfo = [email, phone, linkedUrl].filter(Boolean).join(' • ');
 
   @media (width <= 700px) {
     .hero {
-      margin-bottom: 38px;
+      height: calc(100dvh - 7.5rem);
+    }
+
+    .cv-link {
+      text-align: center;
+      padding-bottom: 1.25rem;
     }
 
     .container {

@@ -9,8 +9,6 @@ import {
 const lang = getLangFromUrl(Astro.url)
 
 import HomeHero from '@/components/sections/HomeHero.astro'
-import PortfolioPreview from '@/components/PortfolioPreview.astro'
-import PhotoPreview from '@/components/PhotoPreview.astro'
 import KeyboardManager from '@/components/KeyboardManager.astro'
 
 import { basics } from '@cv_en'
@@ -21,13 +19,7 @@ const routes = getRoutes(lang)
 
 <Layout title={`${name} — ${label}`}>
   <main>
-    <HomeHero />
-    <!-- <About title="About me" /> -->
-    <a class="cv-link" href={routes.cv}>
-      {t.home.viewCv} →
-    </a>
-    <PortfolioPreview lang={lang} />
-    <PhotoPreview lang={lang} />
+    <HomeHero cvHref={routes.cv} cvLabel={t.home.viewCv} />
   </main>
 
   <KeyboardManager lang={lang} />
@@ -37,25 +29,5 @@ const routes = getRoutes(lang)
   main {
     margin: auto;
     width: 100%;
-  }
-
-  .cv-link {
-    display: block;
-    max-width: 700px;
-    margin: -24px auto 48px;
-    font-size: 0.85rem;
-    color: var(--color-text);
-    font-family: system-ui, sans-serif;
-  }
-
-  .cv-link:hover {
-    text-decoration: underline;
-  }
-
-  @media (width <= 700px) {
-    .cv-link {
-      margin-bottom: 38px;
-      text-align: center;
-    }
   }
 </style>

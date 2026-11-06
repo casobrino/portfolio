@@ -20,6 +20,9 @@ export const pages = {
       portfolio: 'Portafolio',
       photos: 'Fotos',
       blog: 'Blog',
+      overlayTitle: 'Navegación',
+      overlayClose: 'Cerrar menú',
+      overlayHint: 'Desliza hacia abajo para abrir el menú',
     },
     home: {
       viewCv: 'Ver mi CV completo',
@@ -66,6 +69,9 @@ export const pages = {
       portfolio: 'Portfolio',
       photos: 'Photos',
       blog: 'Blog',
+      overlayTitle: 'Navigation',
+      overlayClose: 'Close menu',
+      overlayHint: 'Scroll down to open the menu',
     },
     home: {
       viewCv: 'View my full CV',

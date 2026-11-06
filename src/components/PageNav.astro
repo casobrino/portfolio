@@ -7,6 +7,7 @@ const lang = getLangFromUrl(currentUrl)
 const t = getPageTranslations(lang)
 const routes = getRoutes(lang)
 const currentPath = currentUrl.pathname.replace(/\/$/, '') || '/'
+const isHome = lang === 'en' ? /^\/en\/?$/.test(currentPath) : currentPath === '/'
 
 const links = [
   {
@@ -37,8 +38,13 @@ const links = [
 ]
 ---
 
-<nav class="page-nav no-print" aria-label="Navegación principal">
-  <ul>
+<nav
+  class='page-nav no-print'
+  aria-label='Navegación principal'
+  data-scroll-overlay={isHome ? 'true' : undefined}
+  data-scroll-threshold='90'
+>
+  <ul class='page-nav-inline'>
     {
       links.map(({ href, label, match }) => (
         <li>
@@ -52,6 +58,129 @@ const links = [
   <ThemeToggle />
 </nav>
 
+{
+  isHome && (
+    <div
+      id='nav-overlay'
+      class='nav-overlay no-print'
+      hidden
+      role='dialog'
+      aria-modal='true'
+      aria-labelledby='nav-overlay-title'
+    >
+      <div class='nav-overlay-backdrop' data-nav-overlay-close></div>
+      <div class='nav-overlay-panel'>
+        <header class='nav-overlay-header'>
+          <p id='nav-overlay-title'>{t.nav.overlayTitle}</p>
+          <button type='button' class='nav-overlay-close' data-nav-overlay-close aria-label={t.nav.overlayClose}>
+            ✕
+          </button>
+        </header>
+        <ul class='nav-overlay-links'>
+          {
+            links.map(({ href, label, match }, index) => (
+              <li style={`--i: ${index}`}>
+                <a href={href} aria-current={match.test(currentPath) ? 'page' : undefined}>
+                  {label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <p class='nav-overlay-hint'>{t.nav.overlayHint}</p>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  const nav = document.querySelector<HTMLElement>('.page-nav[data-scroll-overlay]')
+  const overlay = document.getElementById('nav-overlay')
+  if (!nav || !overlay) {
+    // no-op on non-home pages
+  } else {
+    const threshold = Number(nav.dataset.scrollThreshold ?? 90)
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let progress = 0
+    let open = false
+    let resetTimer = 0
+    let touchStartY = 0
+
+    const setOpen = (next: boolean) => {
+      if (open === next) return
+      open = next
+      overlay.hidden = !next
+      document.body.classList.toggle('nav-overlay-open', next)
+      if (!next) progress = 0
+    }
+
+    const bumpProgress = (delta: number) => {
+      if (open || delta <= 0) {
+        if (delta < 0) progress = Math.max(0, progress + delta)
+        return
+      }
+      progress += delta
+      window.clearTimeout(resetTimer)
+      resetTimer = window.setTimeout(() => {
+        if (!open) progress = 0
+      }, 420)
+      if (progress >= threshold) setOpen(true)
+    }
+
+    window.addEventListener(
+      'wheel',
+      (event) => {
+        if (open) {
+          if (event.deltaY < -20) setOpen(false)
+          return
+        }
+        // Only engage when the page can't meaningfully scroll further into content
+        const atTop = window.scrollY <= 2
+        if (!atTop) return
+        if (event.deltaY > 0) {
+          bumpProgress(event.deltaY)
+          if (progress > threshold * 0.35) event.preventDefault()
+        } else {
+          progress = Math.max(0, progress + event.deltaY)
+        }
+      },
+      { passive: false }
+    )
+
+    window.addEventListener(
+      'touchstart',
+      (event) => {
+        touchStartY = event.touches[0]?.clientY ?? 0
+      },
+      { passive: true }
+    )
+
+    window.addEventListener(
+      'touchmove',
+      (event) => {
+        if (open) return
+        if (window.scrollY > 2) return
+        const y = event.touches[0]?.clientY ?? touchStartY
+        const delta = touchStartY - y
+        if (delta > 0) bumpProgress(delta * 0.65)
+      },
+      { passive: true }
+    )
+
+    overlay.querySelectorAll('[data-nav-overlay-close]').forEach((el) => {
+      el.addEventListener('click', () => setOpen(false))
+    })
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && open) setOpen(false)
+    })
+
+    if (reduceMotion) {
+      overlay.classList.add('reduce-motion')
+    }
+  }
+</script>
+
 <style>
   .page-nav {
     max-width: 700px;
@@ -63,7 +192,7 @@ const links = [
     gap: 1rem;
   }
 
-  ul {
+  .page-nav-inline {
     display: flex;
     gap: 1.5rem;
     justify-content: center;
@@ -71,7 +200,7 @@ const links = [
     flex: 1;
   }
 
-  a {
+  .page-nav-inline a {
     font-size: 0.85rem;
     color: var(--color-text-secondary);
     font-family: system-ui, sans-serif;
@@ -80,14 +209,154 @@ const links = [
     transition: color 0.15s ease, border-color 0.15s ease;
   }
 
-  a:hover {
+  .page-nav-inline a:hover {
     color: var(--color-text);
   }
 
-  a[aria-current="page"] {
+  .page-nav-inline a[aria-current='page'] {
     color: var(--color-text);
     border-bottom-color: var(--color-text);
     font-weight: 600;
+  }
+
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: grid;
+  }
+
+  .nav-overlay[hidden] {
+    display: none;
+  }
+
+  .nav-overlay-backdrop {
+    position: absolute;
+    inset: 0;
+    background: var(--color-dialog-backdrop);
+    animation: overlay-fade 0.35s ease both;
+  }
+
+  .nav-overlay-panel {
+    position: relative;
+    z-index: 1;
+    margin: auto;
+    width: min(100% - 2rem, 28rem);
+    padding: 1.5rem 1.25rem 1.75rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 16px;
+    background: var(--color-bg);
+    box-shadow: 0 24px 60px var(--color-shadow);
+    animation: overlay-rise 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .nav-overlay-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .nav-overlay-header p {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    font-family: system-ui, sans-serif;
+  }
+
+  .nav-overlay-close {
+    appearance: none;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text-secondary);
+    width: 2rem;
+    height: 2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    line-height: 1;
+  }
+
+  .nav-overlay-close:hover {
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+    background: var(--color-bg-hover);
+  }
+
+  .nav-overlay-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .nav-overlay-links a {
+    display: block;
+    font-family: system-ui, sans-serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 600;
+    color: var(--color-text);
+    padding: 0.45rem 0;
+    opacity: 0;
+    transform: translateY(12px);
+    animation: link-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: calc(0.06s * var(--i) + 0.12s);
+  }
+
+  .nav-overlay-links a[aria-current='page'] {
+    color: var(--color-accent);
+  }
+
+  .nav-overlay-links a:hover {
+    opacity: 1;
+    color: var(--color-text-secondary);
+  }
+
+  .nav-overlay-hint {
+    margin: 1.5rem 0 0;
+    font-size: 0.75rem;
+    color: var(--color-text-faint);
+  }
+
+  .nav-overlay.reduce-motion .nav-overlay-backdrop,
+  .nav-overlay.reduce-motion .nav-overlay-panel,
+  .nav-overlay.reduce-motion .nav-overlay-links a {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  :global(body.nav-overlay-open) {
+    overflow: hidden;
+  }
+
+  @keyframes overlay-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes overlay-rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes link-in {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @media (width <= 700px) {
@@ -96,11 +365,11 @@ const links = [
       flex-direction: column;
     }
 
-    ul {
+    .page-nav-inline {
       gap: 1rem;
     }
 
-    a {
+    .page-nav-inline a {
       font-size: 0.8rem;
     }
   }
