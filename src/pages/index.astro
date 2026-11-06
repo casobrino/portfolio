@@ -1,25 +1,22 @@
 ---
-import Layout from "@/layouts/Layout.astro"
+import Layout from '@/layouts/Layout.astro'
 
-import About from "@/components/sections/About.astro"
-import Hero from "@/components/sections/Hero.astro"
-import PortfolioPreview from "@/components/PortfolioPreview.astro"
-import PhotoPreview from "@/components/PhotoPreview.astro"
-import KeyboardManager from "@/components/KeyboardManager.astro"
-import { getPageTranslations, getRoutes } from "@/i18n/utils"
+import HomeHero from '@/components/sections/HomeHero.astro'
+import PortfolioPreview from '@/components/PortfolioPreview.astro'
+import KeyboardManager from '@/components/KeyboardManager.astro'
+import { getPageTranslations, getRoutes } from '@/i18n/utils'
 
-import { basics } from "@cv_es"
+import { basics } from '@cv_es'
 const { name, label } = basics
 
-const lang = "es"
+const lang = 'es'
 const t = getPageTranslations(lang)
-const routes = getRoutes(lang)
+const routes = getRoutes(lang);
 ---
 
 <Layout title={`${name} — ${label}`}>
   <main>
-    <Hero lang={lang} />
-    <About />
+    <HomeHero />
     <a class="cv-link" href={routes.cv}>
       {t.home.viewCv} →
     </a>
@@ -32,7 +29,6 @@ const routes = getRoutes(lang)
 
 <style>
   main {
-    padding: 4rem;
     margin: auto;
     width: 100%;
   }
@@ -51,10 +47,6 @@ const routes = getRoutes(lang)
   }
 
   @media (width <= 700px) {
-    main {
-      padding: 2rem;
-    }
-
     .cv-link {
       margin-bottom: 38px;
       text-align: center;

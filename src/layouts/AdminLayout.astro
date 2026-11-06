@@ -17,13 +17,13 @@ const { title } = Astro.props
 
     <script is:inline>
       (function () {
-        const stored = localStorage.getItem("theme")
+        const stored = localStorage.getItem('theme')
         const theme =
-          stored === "light" || stored === "dark"
+          stored === 'light' || stored === 'dark'
             ? stored
-            : window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light"
+            : window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
         document.documentElement.dataset.theme = theme
       })()
     </script>

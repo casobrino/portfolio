@@ -1,29 +1,29 @@
 ---
-import Layout from "@/layouts/Layout.astro"
-import { getLangFromUrl } from "../../i18n/utils"
+import Layout from '@/layouts/Layout.astro'
+import { getLangFromUrl } from '../../i18n/utils'
 
 const lang = getLangFromUrl(Astro.url)
 
-import About from "@/components/sections/About.astro"
-import Education from "@/components/sections/Education.astro"
-import Experience from "@/components/sections/Experience.astro"
-import Hero from "@/components/sections/Hero.astro"
-import Projects from "@/components/sections/Projects.astro"
-import Skills from "@/components/sections/Skills.astro"
-import KeyboardManager from "@/components/KeyboardManager.astro"
+import About from '@/components/sections/About.astro'
+import Education from '@/components/sections/Education.astro'
+import Experience from '@/components/sections/Experience.astro'
+import Hero from '@/components/sections/Hero.astro'
+import Projects from '@/components/sections/Projects.astro'
+import Skills from '@/components/sections/Skills.astro'
+import KeyboardManager from '@/components/KeyboardManager.astro'
 
-import { basics } from "@cv_en"
+import { basics } from '@cv_en'
 const { name } = basics
-const AboutTitle = "About me"
-const ExperienceTitle = "Work Experience"
-const EducationTitle = "Education"
-const ProjectsTitle = "Projects"
-const SkillsTitle = "Skills"
+const AboutTitle = 'About me'
+const ExperienceTitle = 'Work Experience'
+const EducationTitle = 'Education'
+const ProjectsTitle = 'Projects'
+const SkillsTitle = 'Skills'
 ---
 
 <Layout title={`CV — ${name}`}>
   <main>
-    <Hero lang={lang} />
+    <Hero />
     <About title={AboutTitle} />
     <Experience title={ExperienceTitle} />
     <Education title={EducationTitle} />

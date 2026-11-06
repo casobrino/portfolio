@@ -1,6 +1,6 @@
 ---
-import type { AdminData } from "@/scripts/admin-panel"
-import ThemeToggle from "@/components/ThemeToggle.astro"
+import type { AdminData } from '@/scripts/admin-panel'
+import ThemeToggle from '@/components/ThemeToggle.astro'
 
 interface Props {
   initialData: AdminData
@@ -14,7 +14,12 @@ const { initialData } = Astro.props
     <div class="admin-brand">
       <span class="admin-badge">Admin</span>
       <h1>Panel de administración</h1>
-      <p>Gestiona fotos, portafolio y CV. Los cambios se guardan en disco al usar <code>pnpm dev</code>.</p>
+      <p>
+        Gestiona portafolio y CV en JSON. Blog y fotos van en
+        <a href='/dashboard'>/dashboard</a> (SQLite + Cloudinary). Los cambios JSON se guardan en disco con
+        <code>pnpm dev</code>.
+
+      </p>
     </div>
     <div class="header-actions">
       <label class="password-field">
@@ -34,8 +39,7 @@ const { initialData } = Astro.props
   </header>
 
   <nav class="admin-tabs" id="admin-tabs" aria-label="Secciones">
-    <button type="button" class="tab active" data-tab="photos">Fotos</button>
-    <button type="button" class="tab" data-tab="portfolio">Portafolio</button>
+    <button type='button' class='tab active' data-tab='portfolio'>Portafolio</button>
     <button type="button" class="tab" data-tab="cv_es">CV Español</button>
     <button type="button" class="tab" data-tab="cv_en">CV Inglés</button>
   </nav>
@@ -55,29 +59,29 @@ const { initialData } = Astro.props
     getStoredPassword,
     saveToServer,
     setStoredPassword,
-  } from "@/scripts/admin-panel"
-  import type { PortfolioProject } from "@/types"
+  } from '@/scripts/admin-panel'
+  import type { PortfolioProject } from '@/types'
 
-  const root = document.getElementById("admin-root")!
-  const content = document.getElementById("admin-content")!
-  const statusEl = document.getElementById("admin-status")!
-  const passwordInput = document.getElementById("admin-password") as HTMLInputElement
+  const root = document.getElementById('admin-root')!
+  const content = document.getElementById('admin-content')!
+  const statusEl = document.getElementById('admin-status')!
+  const passwordInput = document.getElementById('admin-password') as HTMLInputElement
 
-  let data = JSON.parse(root.getAttribute("data-initial") ?? "{}") as AdminData
-  let activeTab: AdminFileKey = "photos"
+  const data = JSON.parse(root.getAttribute('data-initial') ?? '{}') as AdminData
+  let activeTab: AdminFileKey = 'portfolio'
 
   passwordInput.value = getStoredPassword()
-  passwordInput.addEventListener("change", () => {
+  passwordInput.addEventListener('change', () => {
     setStoredPassword(passwordInput.value)
   })
 
-  function showStatus(message: string, type: "success" | "error" | "info" = "info") {
+  function showStatus (message: string, type: 'success' | 'error' | 'info' = 'info') {
     statusEl.hidden = false
     statusEl.textContent = message
     statusEl.dataset.type = type
   }
 
-  function field(label: string, id: string, value: string, type = "text", placeholder = "") {
+  function field (label: string, id: string, value: string, type = 'text', placeholder = '') {
     return `
       <label class="field">
         <span>${label}</span>
@@ -86,7 +90,7 @@ const { initialData } = Astro.props
     `
   }
 
-  function textareaField(label: string, id: string, value: string, rows = 4) {
+  function textareaField (label: string, id: string, value: string, rows = 4) {
     return `
       <label class="field">
         <span>${label}</span>
@@ -95,27 +99,27 @@ const { initialData } = Astro.props
     `
   }
 
-  function checkboxField(label: string, id: string, checked: boolean) {
+  function checkboxField (label: string, id: string, checked: boolean) {
     return `
       <label class="field checkbox">
-        <input id="${id}" type="checkbox" ${checked ? "checked" : ""} />
+        <input id="${id}" type="checkbox" ${checked ? 'checked' : ''} />
         <span>${label}</span>
       </label>
     `
   }
 
-  function escapeAttr(value: string) {
-    return value.replace(/"/g, "&quot;")
+  function escapeAttr (value: string) {
+    return value.replace(/"/g, '&quot;')
   }
 
-  function escapeHtml(value: string) {
+  function escapeHtml (value: string) {
     return value
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
   }
 
-  function renderPhotos() {
+  function renderPhotos () {
     content.innerHTML = `
       <div class="panel-head">
         <h2>Fotografías (${data.photos.length})</h2>
@@ -129,7 +133,7 @@ const { initialData } = Astro.props
       <div class="cards">
         ${
           data.photos.length === 0
-            ? `<p class="empty-state">No hay fotos. Pulsa "Añadir foto" para crear la primera entrada.</p>`
+            ? '<p class="empty-state">No hay fotos. Pulsa "Añadir foto" para crear la primera entrada.</p>'
             : data.photos
           .map(
             (photo, index) => `
@@ -143,44 +147,44 @@ const { initialData } = Astro.props
                   <h3>Foto ${index + 1}</h3>
                   <button type="button" class="btn danger btn-sm delete-photo" data-index="${index}">Eliminar</button>
                 </div>
-                ${field("Ruta de imagen", `photo-src-${index}`, photo.src, "text", "/photos/mi-foto.jpg")}
+                ${field('Ruta de imagen', `photo-src-${index}`, photo.src, 'text', '/photos/mi-foto.jpg')}
                 <div class="field-row">
-                  ${field("Texto alternativo", `photo-alt-${index}`, photo.alt)}
-                  ${field("Fecha (YYYY-MM)", `photo-date-${index}`, photo.date)}
+                  ${field('Texto alternativo', `photo-alt-${index}`, photo.alt)}
+                  ${field('Fecha (YYYY-MM)', `photo-date-${index}`, photo.date)}
                 </div>
-                ${field("Caption", `photo-caption-${index}`, photo.caption)}
-                ${field("Ubicación", `photo-location-${index}`, photo.location)}
+                ${field('Caption', `photo-caption-${index}`, photo.caption)}
+                ${field('Ubicación', `photo-location-${index}`, photo.location)}
               </div>
             </div>
           </article>
         `
           )
-          .join("")
+          .join('')
         }
       </div>
     `
 
-    document.getElementById("add-photo")?.addEventListener("click", () => {
+    document.getElementById('add-photo')?.addEventListener('click', () => {
       data.photos.push(emptyPhoto())
       renderPhotos()
     })
 
-    document.getElementById("save-photos")?.addEventListener("click", () => savePhotos())
-    document.getElementById("export-photos")?.addEventListener("click", () => {
-      downloadJson("photos.json", data.photos)
-      showStatus("photos.json descargado.", "success")
+    document.getElementById('save-photos')?.addEventListener('click', () => savePhotos())
+    document.getElementById('export-photos')?.addEventListener('click', () => {
+      downloadJson('photos.json', data.photos)
+      showStatus('photos.json descargado.', 'success')
     })
 
-    content.querySelectorAll(".delete-photo").forEach((button) => {
-      button.addEventListener("click", () => {
-        const index = Number(button.getAttribute("data-index"))
+    content.querySelectorAll('.delete-photo').forEach((button) => {
+      button.addEventListener('click', () => {
+        const index = Number(button.getAttribute('data-index'))
         data.photos.splice(index, 1)
         renderPhotos()
       })
     })
   }
 
-  function collectPhotos() {
+  function collectPhotos () {
     data.photos = data.photos.map((_photo, index) => ({
       src: getInputValue(`photo-src-${index}`),
       alt: getInputValue(`photo-alt-${index}`),
@@ -190,7 +194,7 @@ const { initialData } = Astro.props
     }))
   }
 
-  function renderPortfolio() {
+  function renderPortfolio () {
     content.innerHTML = `
       <div class="panel-head">
         <h2>Portafolio (${data.portfolio.length})</h2>
@@ -204,7 +208,7 @@ const { initialData } = Astro.props
       <div class="cards">
         ${
           data.portfolio.length === 0
-            ? `<p class="empty-state">No hay proyectos. Pulsa "Añadir proyecto" para empezar.</p>`
+            ? '<p class="empty-state">No hay proyectos. Pulsa "Añadir proyecto" para empezar.</p>'
             : data.portfolio
           .map(
             (project, index) => `
@@ -218,52 +222,52 @@ const { initialData } = Astro.props
                   <h3>${escapeHtml(project.title) || `Proyecto ${index + 1}`}</h3>
                   <button type="button" class="btn danger btn-sm delete-project" data-index="${index}">Eliminar</button>
                 </div>
-                ${field("Título", `project-title-${index}`, project.title)}
-                ${textareaField("Descripción", `project-desc-${index}`, project.description, 4)}
+                ${field('Título', `project-title-${index}`, project.title)}
+                ${textareaField('Descripción', `project-desc-${index}`, project.description, 4)}
                 <div class="field-row">
-                  ${field("Imagen", `project-image-${index}`, project.image)}
-                  ${field("Año", `project-year-${index}`, String(project.year), "number")}
+                  ${field('Imagen', `project-image-${index}`, project.image)}
+                  ${field('Año', `project-year-${index}`, String(project.year), 'number')}
                 </div>
-                ${field("Tags (separados por coma)", `project-tags-${index}`, project.tags.join(", "))}
+                ${field('Tags (separados por coma)', `project-tags-${index}`, project.tags.join(', '))}
                 <div class="field-row">
-                  ${field("Link demo", `project-live-${index}`, project.links.live ?? "")}
-                  ${field("GitHub", `project-github-${index}`, project.links.github ?? "")}
+                  ${field('Link demo', `project-live-${index}`, project.links.live ?? '')}
+                  ${field('GitHub', `project-github-${index}`, project.links.github ?? '')}
                 </div>
-                ${checkboxField("Destacado", `project-featured-${index}`, project.featured)}
+                ${checkboxField('Destacado', `project-featured-${index}`, project.featured)}
               </div>
             </div>
           </article>
         `
           )
-          .join("")
+          .join('')
         }
       </div>
     `
 
-    document.getElementById("add-project")?.addEventListener("click", () => {
+    document.getElementById('add-project')?.addEventListener('click', () => {
       data.portfolio.push(emptyProject())
       renderPortfolio()
     })
 
-    document.getElementById("save-portfolio")?.addEventListener("click", () => savePortfolio())
-    document.getElementById("export-portfolio")?.addEventListener("click", () => {
-      downloadJson("portfolio.json", data.portfolio)
-      showStatus("portfolio.json descargado.", "success")
+    document.getElementById('save-portfolio')?.addEventListener('click', () => savePortfolio())
+    document.getElementById('export-portfolio')?.addEventListener('click', () => {
+      downloadJson('portfolio.json', data.portfolio)
+      showStatus('portfolio.json descargado.', 'success')
     })
 
-    content.querySelectorAll(".delete-project").forEach((button) => {
-      button.addEventListener("click", () => {
-        const index = Number(button.getAttribute("data-index"))
+    content.querySelectorAll('.delete-project').forEach((button) => {
+      button.addEventListener('click', () => {
+        const index = Number(button.getAttribute('data-index'))
         data.portfolio.splice(index, 1)
         renderPortfolio()
       })
     })
   }
 
-  function collectPortfolio() {
+  function collectPortfolio () {
     data.portfolio = data.portfolio.map((_project, index) => {
       const tags = getInputValue(`project-tags-${index}`)
-        .split(",")
+        .split(',')
         .map((tag) => tag.trim())
         .filter(Boolean)
 
@@ -285,9 +289,9 @@ const { initialData } = Astro.props
     })
   }
 
-  function renderCv(tab: "cv_es" | "cv_en") {
-    const label = tab === "cv_es" ? "CV Español" : "CV Inglés"
-    const filename = tab === "cv_es" ? "cv_es.json" : "cv_en.json"
+  function renderCv (tab: 'cv_es' | 'cv_en') {
+    const label = tab === 'cv_es' ? 'CV Español' : 'CV Inglés'
+    const filename = tab === 'cv_es' ? 'cv_es.json' : 'cv_en.json'
     const jsonText = JSON.stringify(data[tab], null, 2)
 
     content.innerHTML = `
@@ -307,105 +311,105 @@ const { initialData } = Astro.props
       <textarea id="cv-editor" class="json-editor" spellcheck="false">${escapeHtml(jsonText)}</textarea>
     `
 
-    document.getElementById("format-cv")?.addEventListener("click", () => {
+    document.getElementById('format-cv')?.addEventListener('click', () => {
       try {
         const parsed = JSON.parse(getEditorValue())
         setEditorValue(JSON.stringify(parsed, null, 2))
-        showStatus("JSON válido y formateado.", "success")
+        showStatus('JSON válido y formateado.', 'success')
       } catch {
-        showStatus("JSON inválido. Revisa la sintaxis.", "error")
+        showStatus('JSON inválido. Revisa la sintaxis.', 'error')
       }
     })
 
-    document.getElementById("save-cv")?.addEventListener("click", () => saveCv(tab))
-    document.getElementById("export-cv")?.addEventListener("click", () => {
+    document.getElementById('save-cv')?.addEventListener('click', () => saveCv(tab))
+    document.getElementById('export-cv')?.addEventListener('click', () => {
       try {
         const parsed = JSON.parse(getEditorValue())
         downloadJson(filename, parsed)
-        showStatus(`${filename} descargado.`, "success")
+        showStatus(`${filename} descargado.`, 'success')
       } catch {
-        showStatus("JSON inválido. No se puede exportar.", "error")
+        showStatus('JSON inválido. No se puede exportar.', 'error')
       }
     })
 
-    document.getElementById("import-cv")?.addEventListener("change", async (event) => {
+    document.getElementById('import-cv')?.addEventListener('change', async (event) => {
       const file = (event.target as HTMLInputElement).files?.[0]
       if (!file) return
       const text = await file.text()
       setEditorValue(text)
-      showStatus(`${file.name} cargado en el editor.`, "info")
+      showStatus(`${file.name} cargado en el editor.`, 'info')
     })
   }
 
-  function getInputValue(id: string) {
-    return (document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement)?.value ?? ""
+  function getInputValue (id: string) {
+    return (document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement)?.value ?? ''
   }
 
-  function getCheckboxValue(id: string) {
+  function getCheckboxValue (id: string) {
     return (document.getElementById(id) as HTMLInputElement)?.checked ?? false
   }
 
-  function getEditorValue() {
-    return (document.getElementById("cv-editor") as HTMLTextAreaElement)?.value ?? ""
+  function getEditorValue () {
+    return (document.getElementById('cv-editor') as HTMLTextAreaElement)?.value ?? ''
   }
 
-  function setEditorValue(value: string) {
-    const editor = document.getElementById("cv-editor") as HTMLTextAreaElement
+  function setEditorValue (value: string) {
+    const editor = document.getElementById('cv-editor') as HTMLTextAreaElement
     if (editor) editor.value = value
   }
 
-  async function persist(file: AdminFileKey, payload: unknown, successMessage: string) {
+  async function persist (file: AdminFileKey, payload: unknown, successMessage: string) {
     setStoredPassword(passwordInput.value)
 
     try {
       await saveToServer(file, payload, passwordInput.value)
-      showStatus(successMessage, "success")
+      showStatus(successMessage, 'success')
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Error al guardar"
+      const message = error instanceof Error ? error.message : 'Error al guardar'
       showStatus(
         `${message}. Si estás en producción, usa Exportar JSON y reemplaza el archivo manualmente.`,
-        "error"
+        'error'
       )
     }
   }
 
-  async function savePhotos() {
+  async function savePhotos () {
     collectPhotos()
-    await persist("photos", data.photos, "Fotos guardadas en src/data/photos.json")
+    await persist('photos', data.photos, 'Fotos guardadas en src/data/photos.json')
     renderPhotos()
   }
 
-  async function savePortfolio() {
+  async function savePortfolio () {
     collectPortfolio()
-    await persist("portfolio", data.portfolio, "Portafolio guardado en src/data/portfolio.json")
+    await persist('portfolio', data.portfolio, 'Portafolio guardado en src/data/portfolio.json')
     renderPortfolio()
   }
 
-  async function saveCv(tab: "cv_es" | "cv_en") {
+  async function saveCv (tab: 'cv_es' | 'cv_en') {
     try {
       const parsed = JSON.parse(getEditorValue())
       data[tab] = parsed
-      const filename = tab === "cv_es" ? "cv_es.json" : "cv_en.json"
+      const filename = tab === 'cv_es' ? 'cv_es.json' : 'cv_en.json'
       await persist(tab, parsed, `${filename} guardado correctamente`)
       renderCv(tab)
     } catch {
-      showStatus("JSON inválido. Corrige los errores antes de guardar.", "error")
+      showStatus('JSON inválido. Corrige los errores antes de guardar.', 'error')
     }
   }
 
-  function renderActiveTab() {
-    if (activeTab === "photos") renderPhotos()
-    else if (activeTab === "portfolio") renderPortfolio()
+  function renderActiveTab () {
+    if (activeTab === 'photos') renderPhotos()
+    else if (activeTab === 'portfolio') renderPortfolio()
     else renderCv(activeTab)
   }
 
-  document.getElementById("admin-tabs")?.addEventListener("click", (event) => {
-    const button = (event.target as HTMLElement).closest<HTMLButtonElement>(".tab")
+  document.getElementById('admin-tabs')?.addEventListener('click', (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>('.tab')
     if (!button) return
 
     activeTab = button.dataset.tab as AdminFileKey
-    document.querySelectorAll(".tab").forEach((tab) => tab.classList.remove("active"))
-    button.classList.add("active")
+    document.querySelectorAll('.tab').forEach((tab) => tab.classList.remove('active'))
+    button.classList.add('active')
     statusEl.hidden = true
     renderActiveTab()
   })

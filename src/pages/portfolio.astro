@@ -1,14 +1,14 @@
 ---
-import Layout from "@/layouts/Layout.astro"
-import Section from "@/components/Section.astro"
-import PortfolioGrid from "@/components/PortfolioGrid.astro"
-import KeyboardManager from "@/components/KeyboardManager.astro"
-import portfolio from "@/data/portfolio.json"
-import { getPageTranslations } from "@/i18n/utils"
-import { basics } from "@cv_es"
-import type { PortfolioProject } from "@/types"
+import Layout from '@/layouts/Layout.astro'
+import Section from '@/components/Section.astro'
+import PortfolioGrid from '@/components/PortfolioGrid.astro'
+import KeyboardManager from '@/components/KeyboardManager.astro'
+import portfolio from '@/data/portfolio.json'
+import { getPageTranslations } from '@/i18n/utils'
+import { basics } from '@cv_es'
+import type { PortfolioProject } from '@/types'
 
-const lang = "es"
+const lang = 'es'
 const t = getPageTranslations(lang)
 const { name } = basics
 const projects = portfolio as PortfolioProject[]

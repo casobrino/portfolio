@@ -1,0 +1,21 @@
+<canvas id="ascii-pond" class="no-print" aria-hidden="true"></canvas>
+
+<script>
+  import { startKoiPond } from '@/scripts/koi-pond/engine'
+
+  const canvas = document.getElementById('ascii-pond')
+  if (canvas instanceof HTMLCanvasElement) {
+    startKoiPond(canvas)
+  }
+</script>
+
+<style>
+  #ascii-pond {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+</style>

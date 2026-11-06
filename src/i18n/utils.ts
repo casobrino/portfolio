@@ -13,6 +13,7 @@ export function getRoutes (lang: keyof typeof ui) {
       cv: '/en/cv',
       portfolio: '/en/portfolio',
       photos: '/en/photos',
+      blog: '/en/blog',
     }
   }
 
@@ -21,6 +22,7 @@ export function getRoutes (lang: keyof typeof ui) {
     cv: '/cv',
     portfolio: '/portfolio',
     photos: '/fotos',
+    blog: '/blog',
   }
 }
 

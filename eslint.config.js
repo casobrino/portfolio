@@ -1,46 +1,15 @@
-import eslint from '@eslint/js'
+import { defineConfig, globalIgnores } from 'eslint/config'
 import eslintPluginAstro from 'eslint-plugin-astro'
-import globals from 'globals'
-import tseslint from 'typescript-eslint'
+import { neostandard, resolveIgnoresFromGitignore } from 'neostandard'
 
-export default tseslint.config(
-  {
-    ignores: ['dist/**', 'node_modules/**', '.astro/**']
-  },
-  eslint.configs.recommended,
-  ...eslintPluginAstro.configs.recommended,
-  {
-    files: ['**/*.{js,mjs,cjs,ts}'],
-    languageOptions: {
-      parser: tseslint.parser,
-      parserOptions: {
-        sourceType: 'module',
-        ecmaVersion: 'latest'
-      },
-      globals: {
-        ...globals.browser,
-        ...globals.node
-      }
-    }
-  },
-  {
+export default defineConfig([
+  globalIgnores(resolveIgnoresFromGitignore()),
+  ...neostandard({
+    ts: true,
+    noJsx: true,
+    env: ['browser', 'node'],
     files: ['**/*.astro'],
-    languageOptions: {
-      parserOptions: {
-        parser: tseslint.parser,
-        extraFileExtensions: ['.astro']
-      },
-      globals: {
-        ...globals.browser,
-        ...globals.node
-      }
-    },
-    plugins: {
-      '@typescript-eslint': tseslint.plugin
-    },
-    rules: {
-      'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': 'warn'
-    }
-  }
-)
+    filesTs: ['**/*.astro']
+  }),
+  ...eslintPluginAstro.configs.recommended
+])

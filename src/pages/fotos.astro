@@ -1,24 +1,27 @@
 ---
-import Layout from "@/layouts/Layout.astro"
-import Section from "@/components/Section.astro"
-import PhotoGallery from "@/components/PhotoGallery.astro"
-import KeyboardManager from "@/components/KeyboardManager.astro"
-import photos from "@/data/photos.json"
-import { getPageTranslations } from "@/i18n/utils"
-import { basics } from "@cv_es"
-import type { Photo } from "@/types"
+import Layout from '@/layouts/Layout.astro'
+import Section from '@/components/Section.astro'
+import PhotoGallery from '@/components/PhotoGallery.astro'
+import KeyboardManager from '@/components/KeyboardManager.astro'
+import { getGalleryPhotos } from '@/lib/content'
+import { getPageTranslations } from '@/i18n/utils'
+import { basics } from '@cv_es'
 
-const lang = "es"
+const lang = 'es'
 const t = getPageTranslations(lang)
 const { name } = basics
-const galleryPhotos = photos as Photo[]
+const galleryPhotos = await getGalleryPhotos()
 ---
 
 <Layout title={`${t.photos.title} — ${name}`}>
   <main>
     <Section title={t.photos.title}>
-      <p class="subtitle">{t.photos.subtitle}</p>
-      <PhotoGallery photos={galleryPhotos} />
+      <p class='subtitle'>{t.photos.subtitle}</p>
+      {
+        galleryPhotos.length === 0
+          ? <p class='empty'>Todavía no hay fotos.</p>
+          : <PhotoGallery photos={galleryPhotos} />
+      }
     </Section>
   </main>
 
@@ -34,6 +37,11 @@ const galleryPhotos = photos as Photo[]
 
   .subtitle {
     margin-bottom: 24px;
+    font-size: 0.9rem;
+  }
+
+  .empty {
+    color: var(--color-text-secondary);
     font-size: 0.9rem;
   }
 

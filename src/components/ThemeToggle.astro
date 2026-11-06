@@ -1,5 +1,5 @@
 ---
-import { getLangFromUrl, getPageTranslations } from "@/i18n/utils"
+import { getLangFromUrl, getPageTranslations } from '@/i18n/utils'
 
 const lang = getLangFromUrl(Astro.url)
 const t = getPageTranslations(lang)
@@ -22,23 +22,23 @@ const t = getPageTranslations(lang)
 </button>
 
 <script>
-  const STORAGE_KEY = "theme"
+  const STORAGE_KEY = 'theme'
 
-  function getTheme(): "light" | "dark" {
+  function getTheme (): 'light' | 'dark' {
     const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored === "light" || stored === "dark") return stored
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+    if (stored === 'light' || stored === 'dark') return stored
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   }
 
-  function applyTheme(theme: "light" | "dark") {
+  function applyTheme (theme: 'light' | 'dark') {
     document.documentElement.dataset.theme = theme
     localStorage.setItem(STORAGE_KEY, theme)
-    document.getElementById("hotkeypad")?.classList.toggle("dark", theme === "dark")
+    document.getElementById('hotkeypad')?.classList.toggle('dark', theme === 'dark')
   }
 
-  const toggle = document.getElementById("theme-toggle")
-  toggle?.addEventListener("click", () => {
-    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
+  const toggle = document.getElementById('theme-toggle')
+  toggle?.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
     applyTheme(next)
   })
 

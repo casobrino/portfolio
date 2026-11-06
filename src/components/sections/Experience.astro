@@ -1,7 +1,7 @@
 ---
-import Section from "../Section.astro"
-import { ui } from "../../i18n/ui"
-import { getLangFromUrl } from "../../i18n/utils"
+import Section from '../Section.astro'
+import { ui } from '../../i18n/ui'
+import { getLangFromUrl } from '../../i18n/utils'
 
 const lang = getLangFromUrl(Astro.url)
 const cvData = ui[lang]
@@ -15,7 +15,7 @@ const title = Astro.props.title
       work2.map(({ name, startDate, endDate, position, summary, url }) => {
         const startYear = new Date(startDate).getFullYear()
         const endYear =
-          endDate != null ? new Date(endDate).getFullYear() : "Actual"
+          endDate != null ? new Date(endDate).getFullYear() : 'Actual'
 
         return (
           <li>
@@ -34,7 +34,7 @@ const title = Astro.props.title
                   <time datetime={startDate} data-title={startDate}>
                     {startYear}
                   </time>
-                  {" - "}
+                  {' - '}
                   <time datetime={endDate} data-title={endDate}>
                     {endYear}
                   </time>

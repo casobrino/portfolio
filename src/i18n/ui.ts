@@ -19,6 +19,7 @@ export const pages = {
       cv: 'CV',
       portfolio: 'Portafolio',
       photos: 'Fotos',
+      blog: 'Blog',
     },
     home: {
       viewCv: 'Ver mi CV completo',
@@ -37,6 +38,12 @@ export const pages = {
       close: 'Cerrar',
       viewAll: 'Ver toda la galería',
     },
+    blog: {
+      title: 'Blog',
+      subtitle: 'Notas y artículos',
+      empty: 'Todavía no hay publicaciones.',
+      back: 'Volver al blog',
+    },
     theme: {
       toggle: 'Cambiar tema',
       light: 'Modo claro',
@@ -47,6 +54,7 @@ export const pages = {
       goToCv: 'Ir al CV',
       goToPortfolio: 'Ir al portafolio',
       goToPhotos: 'Ir a fotos',
+      goToBlog: 'Ir al blog',
       toggleTheme: 'Cambiar tema',
       navigation: 'Navegación',
     },
@@ -57,6 +65,7 @@ export const pages = {
       cv: 'CV',
       portfolio: 'Portfolio',
       photos: 'Photos',
+      blog: 'Blog',
     },
     home: {
       viewCv: 'View my full CV',
@@ -75,6 +84,12 @@ export const pages = {
       close: 'Close',
       viewAll: 'View full gallery',
     },
+    blog: {
+      title: 'Blog',
+      subtitle: 'Notes and articles',
+      empty: 'No posts yet.',
+      back: 'Back to blog',
+    },
     theme: {
       toggle: 'Toggle theme',
       light: 'Light mode',
@@ -85,6 +100,7 @@ export const pages = {
       goToCv: 'Go to CV',
       goToPortfolio: 'Go to portfolio',
       goToPhotos: 'Go to photos',
+      goToBlog: 'Go to blog',
       toggleTheme: 'Toggle theme',
       navigation: 'Navigation',
     },

@@ -1,34 +1,39 @@
 ---
-import ThemeToggle from "@/components/ThemeToggle.astro"
-import { getLangFromUrl, getPageTranslations, getRoutes } from "@/i18n/utils"
+import ThemeToggle from '@/components/ThemeToggle.astro'
+import { getLangFromUrl, getPageTranslations, getRoutes } from '@/i18n/utils'
 
 const currentUrl = Astro.url
 const lang = getLangFromUrl(currentUrl)
 const t = getPageTranslations(lang)
 const routes = getRoutes(lang)
-const currentPath = currentUrl.pathname.replace(/\/$/, "") || "/"
+const currentPath = currentUrl.pathname.replace(/\/$/, '') || '/'
 
 const links = [
   {
     href: routes.home,
     label: t.nav.home,
-    match: lang === "en" ? /^\/en\/?$/ : /^\/$/,
+    match: lang === 'en' ? /^\/en\/?$/ : /^\/$/,
   },
   {
     href: routes.cv,
     label: t.nav.cv,
-    match: lang === "en" ? /^\/en\/cv$/ : /^\/cv$/,
+    match: lang === 'en' ? /^\/en\/cv$/ : /^\/cv$/,
   },
   {
     href: routes.portfolio,
     label: t.nav.portfolio,
-    match: lang === "en" ? /^\/en\/portfolio$/ : /^\/portfolio$/,
+    match: lang === 'en' ? /^\/en\/portfolio$/ : /^\/portfolio$/,
   },
-  // {
-  //   href: routes.photos,
-  //   label: t.nav.photos,
-  //   match: lang === "en" ? /^\/en\/photos$/ : /^\/fotos$/,
-  // },
+  {
+    href: routes.blog,
+    label: t.nav.blog,
+    match: lang === 'en' ? /^\/en\/blog(\/.*)?$/ : /^\/blog(\/.*)?$/,
+  },
+  {
+    href: routes.photos,
+    label: t.nav.photos,
+    match: lang === 'en' ? /^\/en\/photos$/ : /^\/fotos$/,
+  },
 ]
 ---
 
@@ -37,7 +42,7 @@ const links = [
     {
       links.map(({ href, label, match }) => (
         <li>
-          <a href={href} aria-current={match.test(currentPath) ? "page" : undefined}>
+          <a href={href} aria-current={match.test(currentPath) ? 'page' : undefined}>
             {label}
           </a>
         </li>

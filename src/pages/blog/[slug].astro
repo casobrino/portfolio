@@ -1,0 +1,99 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import Section from '@/components/Section.astro'
+import KeyboardManager from '@/components/KeyboardManager.astro'
+import { getPublishedPost, getPublishedPosts, renderPostHtml } from '@/lib/content'
+import { getPageTranslations, getRoutes } from '@/i18n/utils'
+import { basics } from '@cv_es'
+
+export async function getStaticPaths () {
+  const posts = await getPublishedPosts('es')
+  return posts.map((post) => ({ params: { slug: post.slug } }))
+}
+
+const lang = 'es'
+const t = getPageTranslations(lang)
+const routes = getRoutes(lang)
+const { name } = basics
+const { slug } = Astro.params
+const post = slug ? await getPublishedPost(slug, lang) : null
+
+if (!post) {
+  return Astro.redirect(routes.blog)
+}
+
+const html = await renderPostHtml(post.body)
+---
+
+<Layout title={`${post.title} — ${name}`}>
+  <main>
+    <Section>
+      <p class='back'><a href={routes.blog}>← {t.blog.back}</a></p>
+      <h1>{post.title}</h1>
+      {
+        post.published_at && (
+          <time datetime={post.published_at}>
+            {new Date(post.published_at).toLocaleDateString(lang)}
+          </time>
+        )
+      }
+      <article class='body' set:html={html} />
+    </Section>
+  </main>
+  <KeyboardManager lang={lang} />
+</Layout>
+
+<style>
+  main {
+    padding: 4rem;
+    margin: auto;
+    width: 100%;
+  }
+
+  .back {
+    margin-bottom: 1rem;
+  }
+
+  .back a {
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+  }
+
+  h1 {
+    margin: 0 0 0.5rem;
+    font-size: 1.8rem;
+  }
+
+  time {
+    display: block;
+    margin-bottom: 1.5rem;
+    color: var(--color-text-tertiary);
+    font-size: 0.8rem;
+  }
+
+  .body :global(p) {
+    margin: 0 0 1rem;
+  }
+
+  .body :global(h2),
+  .body :global(h3) {
+    margin: 1.5rem 0 0.75rem;
+  }
+
+  .body :global(a) {
+    color: var(--color-text);
+    text-decoration: underline;
+  }
+
+  .body :global(ul),
+  .body :global(ol) {
+    margin: 0 0 1rem;
+    padding-left: 1.25rem;
+  }
+
+  @media (width <= 700px) {
+    main {
+      padding: 2rem;
+    }
+  }
+</style>

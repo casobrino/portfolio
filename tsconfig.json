@@ -4,6 +4,9 @@
   "exclude": ["dist", "src/plugins"],
   "compilerOptions": {
     "baseUrl": ".",
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "types": ["node"],
     "paths": {
       "@cv_es": ["./cv_es.json"],
       "@cv_en": ["./cv_en.json"],
