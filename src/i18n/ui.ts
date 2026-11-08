@@ -23,6 +23,13 @@ export const pages = {
       overlayTitle: 'Navegación',
       overlayClose: 'Cerrar menú',
       overlayHint: 'Desliza hacia abajo para abrir el menú',
+      overlaySubs: {
+        home: 'Quién soy',
+        cv: 'Experiencia y trayectoria',
+        portfolio: 'Proyectos en los que he trabajado',
+        blog: 'Notas y artículos',
+        photos: 'Capturas que me han gustado',
+      },
     },
     home: {
       viewCv: 'Ver mi CV completo',
@@ -72,6 +79,13 @@ export const pages = {
       overlayTitle: 'Navigation',
       overlayClose: 'Close menu',
       overlayHint: 'Scroll down to open the menu',
+      overlaySubs: {
+        home: 'Who I am',
+        cv: 'Experience and background',
+        portfolio: 'Projects I have worked on',
+        blog: 'Notes and articles',
+        photos: 'Shots I have enjoyed',
+      },
     },
     home: {
       viewCv: 'View my full CV',

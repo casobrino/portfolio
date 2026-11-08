@@ -1,5 +1,7 @@
 ---
 import ThemeToggle from '@/components/ThemeToggle.astro'
+import NavHoverLinks from '@/components/nav/NavHoverLinks'
+import { basics } from '@cv_es'
 import { getLangFromUrl, getPageTranslations, getRoutes } from '@/i18n/utils'
 
 const currentUrl = Astro.url
@@ -8,6 +10,44 @@ const t = getPageTranslations(lang)
 const routes = getRoutes(lang)
 const currentPath = currentUrl.pathname.replace(/\/$/, '') || '/'
 const isHome = lang === 'en' ? /^\/en\/?$/.test(currentPath) : currentPath === '/'
+
+const overlayItems = [
+  {
+    href: routes.home,
+    heading: t.nav.home,
+    subheading: t.nav.overlaySubs.home,
+    imgSrc: basics.image,
+    current: (lang === 'en' ? /^\/en\/?$/ : /^\/$/).test(currentPath),
+  },
+  {
+    href: routes.cv,
+    heading: t.nav.cv,
+    subheading: t.nav.overlaySubs.cv,
+    imgSrc: '/portfolio/glupit.webp',
+    current: (lang === 'en' ? /^\/en\/cv$/ : /^\/cv$/).test(currentPath),
+  },
+  {
+    href: routes.portfolio,
+    heading: t.nav.portfolio,
+    subheading: t.nav.overlaySubs.portfolio,
+    imgSrc: '/portfolio/igendar.webp',
+    current: (lang === 'en' ? /^\/en\/portfolio$/ : /^\/portfolio$/).test(currentPath),
+  },
+  {
+    href: routes.blog,
+    heading: t.nav.blog,
+    subheading: t.nav.overlaySubs.blog,
+    imgSrc: '/portfolio/water-them.jpg',
+    current: (lang === 'en' ? /^\/en\/blog(\/.*)?$/ : /^\/blog(\/.*)?$/).test(currentPath),
+  },
+  {
+    href: routes.photos,
+    heading: t.nav.photos,
+    subheading: t.nav.overlaySubs.photos,
+    imgSrc: '/portfolio/instagram-spliter.webp',
+    current: (lang === 'en' ? /^\/en\/photos$/ : /^\/fotos$/).test(currentPath),
+  },
+]
 
 const links = [
   {
@@ -42,7 +82,7 @@ const links = [
   class='page-nav no-print'
   aria-label='Navegación principal'
   data-scroll-overlay={isHome ? 'true' : undefined}
-  data-scroll-threshold='90'
+  data-scroll-threshold='125'
 >
   <ul class='page-nav-inline'>
     {
@@ -76,17 +116,7 @@ const links = [
             ✕
           </button>
         </header>
-        <ul class='nav-overlay-links'>
-          {
-            links.map(({ href, label, match }, index) => (
-              <li style={`--i: ${index}`}>
-                <a href={href} aria-current={match.test(currentPath) ? 'page' : undefined}>
-                  {label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
+        <NavHoverLinks client:load items={overlayItems} />
         <p class='nav-overlay-hint'>{t.nav.overlayHint}</p>
       </div>
     </div>
@@ -99,19 +129,48 @@ const links = [
   if (!nav || !overlay) {
     // no-op on non-home pages
   } else {
-    const threshold = Number(nav.dataset.scrollThreshold ?? 90)
+    const threshold = Number(nav.dataset.scrollThreshold ?? 125)
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const closeMs = 480
     let progress = 0
     let open = false
+    let closing = false
     let resetTimer = 0
+    let closeTimer = 0
     let touchStartY = 0
 
+    const finishClose = () => {
+      window.clearTimeout(closeTimer)
+      open = false
+      closing = false
+      progress = 0
+      overlay.hidden = true
+      overlay.classList.remove('is-closing')
+      document.body.classList.remove('nav-overlay-open')
+    }
+
     const setOpen = (next: boolean) => {
-      if (open === next) return
-      open = next
-      overlay.hidden = !next
-      document.body.classList.toggle('nav-overlay-open', next)
-      if (!next) progress = 0
+      if (next) {
+        if (open && !closing) return
+        window.clearTimeout(closeTimer)
+        closing = false
+        open = true
+        overlay.classList.remove('is-closing')
+        overlay.hidden = false
+        document.body.classList.add('nav-overlay-open')
+        return
+      }
+      if (!open || closing) return
+      progress = 0
+      if (reduceMotion) {
+        open = false
+        overlay.hidden = true
+        document.body.classList.remove('nav-overlay-open')
+        return
+      }
+      closing = true
+      overlay.classList.add('is-closing')
+      closeTimer = window.setTimeout(finishClose, closeMs + 40)
     }
 
     const bumpProgress = (delta: number) => {
@@ -166,6 +225,11 @@ const links = [
       },
       { passive: true }
     )
+
+    overlay.addEventListener('animationend', (event) => {
+      if (event.animationName !== 'sheet-down') return
+      finishClose()
+    })
 
     overlay.querySelectorAll('[data-nav-overlay-close]').forEach((el) => {
       el.addEventListener('click', () => setOpen(false))
@@ -223,7 +287,8 @@ const links = [
     position: fixed;
     inset: 0;
     z-index: 80;
-    display: grid;
+    display: flex;
+    align-items: stretch;
   }
 
   .nav-overlay[hidden] {
@@ -233,21 +298,23 @@ const links = [
   .nav-overlay-backdrop {
     position: absolute;
     inset: 0;
-    background: var(--color-dialog-backdrop);
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
     animation: overlay-fade 0.35s ease both;
   }
 
   .nav-overlay-panel {
     position: relative;
     z-index: 1;
-    margin: auto;
-    width: min(100% - 2rem, 28rem);
-    padding: 1.5rem 1.25rem 1.75rem;
-    border: 1px solid var(--color-border-strong);
-    border-radius: 16px;
+    width: 100%;
+    margin-top: auto;
+    min-height: 100%;
+    padding: 1.25rem clamp(1.25rem, 6vw, 4rem) 2rem;
     background: var(--color-bg);
-    box-shadow: 0 24px 60px var(--color-shadow);
-    animation: overlay-rise 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: visible;
+    animation: sheet-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   .nav-overlay-header {
@@ -286,43 +353,28 @@ const links = [
     background: var(--color-bg-hover);
   }
 
-  .nav-overlay-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .nav-overlay-links a {
-    display: block;
-    font-family: system-ui, sans-serif;
-    font-size: clamp(1.5rem, 4vw, 2rem);
-    font-weight: 600;
-    color: var(--color-text);
-    padding: 0.45rem 0;
-    opacity: 0;
-    transform: translateY(12px);
-    animation: link-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    animation-delay: calc(0.06s * var(--i) + 0.12s);
-  }
-
-  .nav-overlay-links a[aria-current='page'] {
-    color: var(--color-accent);
-  }
-
-  .nav-overlay-links a:hover {
-    opacity: 1;
-    color: var(--color-text-secondary);
-  }
-
   .nav-overlay-hint {
     margin: 1.5rem 0 0;
     font-size: 0.75rem;
     color: var(--color-text-faint);
   }
 
+  .nav-overlay.is-closing {
+    pointer-events: none;
+  }
+
+  .nav-overlay.is-closing .nav-overlay-backdrop {
+    animation: overlay-fade-out 0.42s ease both;
+  }
+
+  .nav-overlay.is-closing .nav-overlay-panel {
+    animation: sheet-down 0.48s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
   .nav-overlay.reduce-motion .nav-overlay-backdrop,
   .nav-overlay.reduce-motion .nav-overlay-panel,
-  .nav-overlay.reduce-motion .nav-overlay-links a {
+  .nav-overlay.reduce-motion.is-closing .nav-overlay-backdrop,
+  .nav-overlay.reduce-motion.is-closing .nav-overlay-panel {
     animation: none;
     opacity: 1;
     transform: none;
@@ -341,21 +393,30 @@ const links = [
     }
   }
 
-  @keyframes overlay-rise {
+  @keyframes sheet-up {
     from {
-      opacity: 0;
-      transform: translateY(18px) scale(0.98);
+      transform: translateY(100%);
     }
     to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: translateY(0);
     }
   }
 
-  @keyframes link-in {
-    to {
+  @keyframes overlay-fade-out {
+    from {
       opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes sheet-down {
+    from {
       transform: translateY(0);
+    }
+    to {
+      transform: translateY(100%);
     }
   }
 

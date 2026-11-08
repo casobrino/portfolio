@@ -1,0 +1,93 @@
+.nav-hover {
+  width: min(100%, 56rem);
+}
+
+.nav-hover-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0.25rem;
+  border-bottom: 2px solid var(--color-border-strong);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: border-color 0.45s ease, color 0.45s ease;
+}
+
+.nav-hover-link:hover,
+.nav-hover-link:focus-visible {
+  border-bottom-color: var(--color-text);
+  color: var(--color-text);
+}
+
+.nav-hover-heading {
+  position: relative;
+  z-index: 1;
+  display: block;
+  font-family: system-ui, sans-serif;
+  font-size: clamp(2rem, 6vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.nav-hover-letter {
+  display: inline-block;
+}
+
+.nav-hover-sub {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin-top: 0.4rem;
+  font-family: system-ui, sans-serif;
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  transition: color 0.45s ease;
+}
+
+.nav-hover-link:hover .nav-hover-sub,
+.nav-hover-link:focus-visible .nav-hover-sub {
+  color: var(--color-text);
+}
+
+.nav-hover-img {
+  position: absolute;
+  z-index: 0;
+  width: 8rem;
+  height: 6rem;
+  object-fit: cover;
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.nav-hover-arrow {
+  position: relative;
+  z-index: 1;
+  color: var(--color-text);
+  padding: 0.5rem;
+}
+
+.nav-hover-link[aria-current='page'] .nav-hover-heading {
+  color: var(--color-text);
+}
+
+@media (width >= 700px) {
+  .nav-hover-link {
+    padding: 1.6rem 0.25rem;
+  }
+
+  .nav-hover-img {
+    width: 16rem;
+    height: 11rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-hover-img,
+  .nav-hover-arrow,
+  .nav-hover-letter {
+    transition: none;
+  }
+}
